@@ -1,0 +1,6 @@
+rootProject.name = "ComputerGraphicsProject"
+
+include ':ui'
+include ':math'
+include 'graphics'
+
