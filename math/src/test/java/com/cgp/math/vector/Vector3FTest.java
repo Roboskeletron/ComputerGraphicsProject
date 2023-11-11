@@ -1,4 +1,4 @@
-package com.cgp.vector;
+package com.cgp.math.vector;
 
 import com.cgp.math.vector.Vector3F;
 import org.junit.jupiter.api.Test;

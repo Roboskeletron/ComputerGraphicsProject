@@ -1,4 +1,4 @@
-package com.cgp.vector;
+package com.cgp.math.vector;
 
 
 import com.cgp.math.vector.Vector2F;
