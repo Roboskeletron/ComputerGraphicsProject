@@ -76,4 +76,13 @@ public class Vector3F {
         float newZ = this.x * other.y - this.y * other.x;
         return new Vector3F(newX, newY, newZ);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Vector3F vector3F){
+            return x == vector3F.x && y == vector3F.y && z == vector3F.z;
+        }
+
+        return false;
+    }
 }
