@@ -8,6 +8,10 @@ public class Polygon {
     private final Vector3F[] vertices;
 
     protected Polygon(Vector3F[] vertices) {
+        if (vertices.length < 3){
+            throw new IllegalArgumentException("Polygon must consist of at least 3 vertices");
+        }
+
         this.vertices = vertices;
     }
 
