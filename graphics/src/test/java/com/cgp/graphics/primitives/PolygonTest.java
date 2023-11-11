@@ -112,7 +112,7 @@ class PolygonTest {
         return Stream.of(
                 List.of(new Vector3F(0, 0, 0), new Vector3F(2, 0, 0), new Vector3F(1, 0, 0)),
                 List.of(new Vector3F(0, 0, 0), new Vector3F(0, 0, 0), new Vector3F(0, 0, 0), new Vector3F(1, 0, 0)),
-                Set.of(new Vector3F(0, 0, 0), new Vector3F(0, 0, 0), new Vector3F(0, 0, 0), new Vector3F(1, 0, 0))
+                Set.of(new Vector3F(0, 0, 0), new Vector3F(2, 0, 0), new Vector3F(3, 0, 0), new Vector3F(1, 0, 0))
         );
     }
 
