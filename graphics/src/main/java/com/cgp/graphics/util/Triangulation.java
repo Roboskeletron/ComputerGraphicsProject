@@ -13,10 +13,10 @@ public class Triangulation {
             return polygons;
         }
 
-        for (int i = 2; i < origin.getVertexCount(); i += 2){
+        for (int i = 2; i < origin.getVertexCount(); i += 1){
             Polygon polygon = new Polygon.Builder()
                     .withVertex(origin.getVertex(0))
-                    .withVertex(origin.getVertex(i -1))
+                    .withVertex(origin.getVertex(i - 1))
                     .withVertex(origin.getVertex(i))
                     .build();
 
