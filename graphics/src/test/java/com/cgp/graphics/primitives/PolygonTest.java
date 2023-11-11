@@ -1,7 +1,6 @@
 package com.cgp.graphics.primitives;
 
 import com.cgp.math.vector.Vector3F;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -11,7 +10,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PolygonTest {
     @ParameterizedTest
