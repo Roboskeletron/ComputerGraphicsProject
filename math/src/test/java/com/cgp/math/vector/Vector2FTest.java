@@ -1,10 +1,8 @@
 package com.cgp.math.vector;
 
-
-import com.cgp.math.vector.Vector2F;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Vector2FTest {
     @Test
