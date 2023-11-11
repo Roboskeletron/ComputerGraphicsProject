@@ -1,5 +1,7 @@
 package com.cgp.math.vector;
 
+import com.cgp.math.util.MathUtil;
+
 public class Vector3F {
     private float x;
     private float y;
@@ -80,7 +82,7 @@ public class Vector3F {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Vector3F vector3F){
-            return x == vector3F.x && y == vector3F.y && z == vector3F.z;
+            return MathUtil.compareFloat(x, vector3F.x) == 0 && MathUtil.compareFloat(y, vector3F.y) == 0 && MathUtil.compareFloat(z, vector3F.z) == 0;
         }
 
         return false;
