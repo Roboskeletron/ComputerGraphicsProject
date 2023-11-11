@@ -23,6 +23,15 @@ public class Polygon {
         return vertices.length;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Polygon polygon){
+
+            return Arrays.equals(vertices, polygon.vertices);
+        }
+        return false;
+    }
+
     public static class Builder {
         private final LinkedList<Vector3F> vertices = new LinkedList<>();
 
