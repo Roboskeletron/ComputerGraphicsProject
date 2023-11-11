@@ -5,14 +5,13 @@ public class AffineTransform {
     private Matrix4 transformationMatrix;
 
     public AffineTransform() {
-        this.transformationMatrix = new Matrix4(true); // Инициализация как единичная матрица
+        this.transformationMatrix = new Matrix4(true);
     }
 
     public Matrix4 getTransformationMatrix() {
         return transformationMatrix;
     }
 
-    // Метод для масштабирования
     public void scale(float scaleX, float scaleY, float scaleZ) {
         Matrix4 scaleMatrix = new Matrix4(new float[][]{
                 {scaleX, 0, 0, 0},
@@ -23,7 +22,6 @@ public class AffineTransform {
         transformationMatrix = transformationMatrix.multiply(scaleMatrix);
     }
 
-    // Метод для общей матрицы поворота по трем осям
     public void rotate(float radiansX, float radiansY, float radiansZ) {
         float cosX = (float) Math.cos(radiansX);
         float sinX = (float) Math.sin(radiansX);
@@ -42,7 +40,6 @@ public class AffineTransform {
         transformationMatrix = transformationMatrix.multiply(rotationMatrix);
     }
 
-    // Метод для переноса
     public void translate(float translateX, float translateY, float translateZ) {
         Matrix4 translationMatrix = new Matrix4(new float[][]{
                 {1, 0, 0, translateX},
