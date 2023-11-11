@@ -23,46 +23,19 @@ public class AffineTransform {
         transformationMatrix = transformationMatrix.multiply(scaleMatrix);
     }
 
-    // Метод для вращения (в градусах)
-    public void rotateX(float degrees) {
-        float radians = (float) Math.toRadians(degrees);
-        float cos = (float) Math.cos(radians);
-        float sin = (float) Math.sin(radians);
+    // Метод для общей матрицы поворота по трем осям
+    public void rotate(float radiansX, float radiansY, float radiansZ) {
+        float cosX = (float) Math.cos(radiansX);
+        float sinX = (float) Math.sin(radiansX);
+        float cosY = (float) Math.cos(radiansY);
+        float sinY = (float) Math.sin(radiansY);
+        float cosZ = (float) Math.cos(radiansZ);
+        float sinZ = (float) Math.sin(radiansZ);
 
         Matrix4 rotationMatrix = new Matrix4(new float[][]{
-                {1, 0, 0, 0},
-                {0, cos, -sin, 0},
-                {0, sin, cos, 0},
-                {0, 0, 0, 1}
-        });
-
-        transformationMatrix = transformationMatrix.multiply(rotationMatrix);
-    }
-
-    public void rotateY(float degrees) {
-        float radians = (float) Math.toRadians(degrees);
-        float cos = (float) Math.cos(radians);
-        float sin = (float) Math.sin(radians);
-
-        Matrix4 rotationMatrix = new Matrix4(new float[][]{
-                {cos, 0, sin, 0},
-                {0, 1, 0, 0},
-                {-sin, 0, cos, 0},
-                {0, 0, 0, 1}
-        });
-
-        transformationMatrix = transformationMatrix.multiply(rotationMatrix);
-    }
-
-    public void rotateZ(float degrees) {
-        float radians = (float) Math.toRadians(degrees);
-        float cos = (float) Math.cos(radians);
-        float sin = (float) Math.sin(radians);
-
-        Matrix4 rotationMatrix = new Matrix4(new float[][]{
-                {cos, -sin, 0, 0},
-                {sin, cos, 0, 0},
-                {0, 0, 1, 0},
+                {cosY * cosZ, -cosX * sinZ + sinX * sinY * cosZ, sinX * sinZ + cosX * sinY * cosZ, 0},
+                {cosY * sinZ, cosX * cosZ + sinX * sinY * sinZ, -sinX * cosZ + cosX * sinY * sinZ, 0},
+                {-sinY, sinX * cosY, cosX * cosY, 0},
                 {0, 0, 0, 1}
         });
 
@@ -81,3 +54,4 @@ public class AffineTransform {
         transformationMatrix = transformationMatrix.multiply(translationMatrix);
     }
 }
+
