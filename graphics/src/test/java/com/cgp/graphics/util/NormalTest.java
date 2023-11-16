@@ -32,7 +32,7 @@ class NormalTest {
 
         assertThrows(IllegalArgumentException.class,
                 () -> Normal.getPolygonNormal(nonTriangularPolygon),
-                "");
+                "Polygon must consist of at least 3 vertices");
     }
 
     @Test
