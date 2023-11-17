@@ -50,4 +50,15 @@ public class Normal {
 
         return normal;
     }
+
+    public static Vector3F getPolygonNormal(Polygon polygon, Map<Vector3F, Vector3F> vertexNormalMap){
+        Vector3F normal = new Vector3F(0, 0, 0);
+
+        for (int  i = 0; i < polygon.getVertexCount(); i++){
+            var vertex = polygon.getVertex(i);
+            normal = normal.add(vertexNormalMap.get(vertex));
+        }
+
+        return normal.scalarMultiply(1 / (float) polygon.getVertexCount());
+    }
 }
