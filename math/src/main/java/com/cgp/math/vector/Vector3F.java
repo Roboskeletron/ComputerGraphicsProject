@@ -1,5 +1,7 @@
 package com.cgp.math.vector;
 
+import com.cgp.math.util.MathUtil;
+
 public class Vector3F {
     private float x;
     private float y;
@@ -75,5 +77,14 @@ public class Vector3F {
         float newY = this.z * other.x - this.x * other.z;
         float newZ = this.x * other.y - this.y * other.x;
         return new Vector3F(newX, newY, newZ);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Vector3F vector3F){
+            return MathUtil.compareFloat(x, vector3F.x) == 0 && MathUtil.compareFloat(y, vector3F.y) == 0 && MathUtil.compareFloat(z, vector3F.z) == 0;
+        }
+
+        return false;
     }
 }
