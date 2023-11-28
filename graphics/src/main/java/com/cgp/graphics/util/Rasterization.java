@@ -5,6 +5,7 @@ import com.cgp.graphics.entities.Camera;
 import com.cgp.graphics.primitives.Transform;
 import com.cgp.math.matrix.Matrix4;
 import com.cgp.math.vector.Vector3F;
+import com.cgp.math.vector.Vector4F;
 
 public class Rasterization {
     public static Matrix4 lookAt(GameObject target, Camera camera) {
@@ -36,5 +37,12 @@ public class Rasterization {
                 {0, 0, (camera.getFPlane() + camera.getNPlane()) / difference, 2 * camera.getFPlane() * camera.getNPlane() / -difference},
                 {0, 0, 1, 0}
         });
+    }
+
+    public static Vector3F vertexToNormalizedScreen(Vector4F vertex, Matrix4 P, Matrix4 V, Matrix4 M){
+        var v = P.multiply(V).multiply(M).multiplyVector4(vertex);
+        var w = v.getW();
+
+        return new Vector3F(v.getX() / w, v.getY() / w, v.getZ() / w);
     }
 }
