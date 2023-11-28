@@ -8,6 +8,12 @@ public class GameObject {
     private Mesh mesh;
     private Material material;
 
+    protected GameObject(Transform transform, Mesh mesh, Material material) {
+        this.transform = transform;
+        this.mesh = mesh;
+        this.material = material;
+    }
+
     public Material getMaterial() {
         return material;
     }
