@@ -56,22 +56,11 @@ public class Rasterization {
         point.setY(y);
     }
 
-    public static Vector3F barycentricVector(Polygon polygon, Vector3F point) {
-        if (polygon.getVertexCount() != 3) {
-            throw new IllegalArgumentException("Polygon should be triangulated");
-        }
-
-        var xA = polygon.getVertex(0).getX();
-        var xB = polygon.getVertex(1).getX();
-        var xC = polygon.getVertex(2).getX();
-
-        var yA = polygon.getVertex(0).getY();
-        var yB = polygon.getVertex(1).getY();
-        var yC = polygon.getVertex(2).getY();
+    public static Vector3F barycentricVector(Vector3F a, Vector3F b, Vector3F c, Vector3F point) {
 
         return new Matrix3(new float[][]{
-                {xA, xB, xC},
-                {yA, yB, yC},
+                {a.getX(), b.getX(), c.getX()},
+                {a.getY(), b.getY(), c.getY()},
                 {1, 1, 1}
         })
                 .inverse()
