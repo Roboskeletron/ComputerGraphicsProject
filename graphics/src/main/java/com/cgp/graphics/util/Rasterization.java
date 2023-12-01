@@ -2,7 +2,6 @@ package com.cgp.graphics.util;
 
 import com.cgp.graphics.components.GameObject;
 import com.cgp.graphics.entities.Camera;
-import com.cgp.graphics.primitives.Polygon;
 import com.cgp.graphics.primitives.Transform;
 import com.cgp.math.matrix.Matrix3;
 import com.cgp.math.matrix.Matrix4;
@@ -54,21 +53,5 @@ public class Rasterization {
 
         point.setX(x);
         point.setY(y);
-    }
-
-    public static Vector3F barycentricVector(Vector3F a, Vector3F b, Vector3F c, Vector3F point) {
-
-        return new Matrix3(new float[][]{
-                {a.getX(), b.getX(), c.getX()},
-                {a.getY(), b.getY(), c.getY()},
-                {1, 1, 1}
-        })
-                .inverse()
-                .multiplyVector3(
-                        new Vector3F(
-                                point.getX(),
-                                point.getY(),
-                                1)
-                );
     }
 }
