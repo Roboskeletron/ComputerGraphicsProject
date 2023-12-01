@@ -1,5 +1,7 @@
 package com.cgp.math.vector;
 
+import com.cgp.math.util.MathUtil;
+
 public class Vector2F {
     private float x;
     private float y;
@@ -56,5 +58,14 @@ public class Vector2F {
     public Vector2F normalize() {
         float magnitude = this.magnitude();
         return new Vector2F(this.x / magnitude, this.y / magnitude);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Vector2F vector){
+            return MathUtil.compareFloat(x, vector.x) == 0 && MathUtil.compareFloat(y, vector.y) == 0;
+        }
+
+        return false;
     }
 }
