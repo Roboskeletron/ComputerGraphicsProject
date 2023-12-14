@@ -10,7 +10,9 @@ public class Light {
             throw new IllegalArgumentException("k must be between 0 and 1 (inclusive)");
         }
 
-        var l = normal.scalarMultiply(-1).dotProduct(vertex);
+        var l = normal.scalarMultiply(-1).dotProduct(ray);
+
+        l = l < 0 ? 0 : l;
 
         var color = vertex.getColor();
         var rgb = new Vector3F((float) color.getRed(), (float) color.getGreen(), (float) color.getBlue());
