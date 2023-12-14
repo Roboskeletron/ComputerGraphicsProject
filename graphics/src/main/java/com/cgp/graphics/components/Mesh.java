@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class Mesh {
     protected final List<Polygon> polygons;
     protected final HashMap<Vector3F, Vector3F> vertexNormalMap = new HashMap<>();
-    protected final HashMap<Vector3F, ArrayList<Polygon>> vertexPolygonMap = new HashMap<>();
+    protected final HashMap<Vector3F, List<Polygon>> vertexPolygonMap = new HashMap<>();
     protected final HashMap<Polygon, Vector3F> polygonNormalMap = new HashMap<>();
     protected ArrayList<Polygon> triangulatedPolygons = new ArrayList<>();
 
@@ -24,6 +24,9 @@ public class Mesh {
 
     public void bakeMesh() {
         triangulatedPolygons.clear();
+        vertexNormalMap.clear();
+        polygonNormalMap.clear();
+        vertexPolygonMap.clear();
 
         polygons.stream().map(Triangulation::basic).forEach(polygons ->
                 polygons.stream().forEachOrdered(this::mapVerticesToPolygons)
@@ -36,21 +39,26 @@ public class Mesh {
                 )
         );
 
-
+        vertexNormalMap.putAll(vertexPolygonMap.keySet().stream().collect(Collectors.toMap(
+                                vertex -> vertex,
+                                vertex -> Normal.getVertexNormal(vertex, vertexPolygonMap, polygonNormalMap)
+                        )
+                )
+        );
     }
 
-    private void mapVerticesToPolygons(Polygon polygon){
+    private void mapVerticesToPolygons(Polygon polygon) {
         triangulatedPolygons.add(polygon);
 
         triangulatedPolygons.stream().map(Polygon::getVertices)
                 .forEachOrdered(vertices ->
                         {
                             for (var vertex : vertices) {
-                                var polygons = vertexPolygonMap.containsKey(vertex) ?
-                                        vertexPolygonMap.get(vertex) : new ArrayList<Polygon>();
+                                vertexPolygonMap.putIfAbsent(vertex, polygons);
+
+                                var polygons = vertexPolygonMap.get(vertex);
 
                                 polygons.add(polygon);
-                                vertexPolygonMap.put(vertex, polygons);
                             }
                         }
                 );
