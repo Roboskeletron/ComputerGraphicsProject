@@ -46,11 +46,10 @@ public class Rasterization {
         return new Vector3F(v.getX() / w, v.getY() / w, v.getZ() / w);
     }
 
-    public static void toScreenCoordinates(Vector3F point, float width, float height) {
+    public static Vector3F toScreenCoordinates(Vector3F point, float width, float height) {
         var x = (width - 1) / 2 * point.getX() + (width - 1) / 2;
         var y = (1 - height) / 2 * point.getY() + (height - 1) / 2;
 
-        point.setX(x);
-        point.setY(y);
+        return new Vector3F(x, y, point.getZ());
     }
 }
