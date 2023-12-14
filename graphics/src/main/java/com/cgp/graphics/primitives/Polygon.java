@@ -23,6 +23,10 @@ public class Polygon {
         return vertices.length;
     }
 
+    public Vector3F[] getVertices() {
+        return vertices;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Polygon polygon){
