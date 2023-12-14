@@ -63,4 +63,24 @@ public class Mesh {
                         }
                 );
     }
+
+    public List<Polygon> getPolygons() {
+        return polygons;
+    }
+
+    public HashMap<Vector3F, Vector3F> getVertexNormalMap() {
+        return vertexNormalMap;
+    }
+
+    public HashMap<Vector3F, List<Polygon>> getVertexPolygonMap() {
+        return vertexPolygonMap;
+    }
+
+    public HashMap<Polygon, Vector3F> getPolygonNormalMap() {
+        return polygonNormalMap;
+    }
+
+    public ArrayList<Polygon> getTriangulatedPolygons() {
+        return triangulatedPolygons;
+    }
 }

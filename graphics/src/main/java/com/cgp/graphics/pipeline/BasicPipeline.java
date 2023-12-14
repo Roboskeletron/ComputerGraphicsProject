@@ -3,17 +3,21 @@ package com.cgp.graphics.pipeline;
 import com.cgp.graphics.components.GameObject;
 import com.cgp.graphics.components.Mesh;
 import com.cgp.graphics.components.Scene;
-import com.cgp.graphics.primitives.Polygon;
+import com.cgp.graphics.entities.Camera;
 import com.cgp.graphics.primitives.Transform;
+import com.cgp.graphics.util.Rasterization;
 import com.cgp.math.AffineTransform.AffineTransform;
-import com.cgp.math.vector.Vector3F;
+import com.cgp.math.matrix.Matrix4;
 import javafx.scene.canvas.GraphicsContext;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.stream.Collectors;
 
 public class BasicPipeline  implements Pipeline {
     private Scene scene;
+    private final HashSet<Matrix4> modelMatrices = new HashSet<>();
+    private final HashSet<Matrix4> viewMatrices = new HashSet<>();
+    private Matrix4 clipMatrix = null;
 
     public BasicPipeline(Scene scene) {
         setScene(scene);
@@ -21,10 +25,20 @@ public class BasicPipeline  implements Pipeline {
 
     @Override
     public void drawScene(GraphicsContext graphicsContext) {
+        if (modelMatrices.isEmpty()){
+            calculateModelMatrices();
+        }
 
+        if (viewMatrices.isEmpty()){
+            calculateViewMatrices();
+        }
+
+        if (clipMatrix == null){
+            calculateClipMatrix();
+        }
     }
 
-    private AffineTransform applyAffineTransform(Transform transform){
+    protected AffineTransform applyAffineTransform(Transform transform){
         AffineTransform affineTransform = new AffineTransform();
 
         var position = transform.getPosition();
@@ -38,7 +52,30 @@ public class BasicPipeline  implements Pipeline {
         return affineTransform;
     }
 
-    private void bakeScene(){
+    protected void calculateModelMatrices(){
+        modelMatrices.addAll(scene.getObjectCollection().stream()
+                .filter(gameObject -> !(gameObject instanceof Camera))
+                .map(GameObject::getTransform)
+                .map(this::applyAffineTransform)
+                .map(AffineTransform::getTransformationMatrix)
+                .collect(Collectors.toSet())
+        );
+    }
+
+    protected void calculateViewMatrices(){
+        viewMatrices.addAll(
+                scene.getObjectCollection().stream()
+                        .filter(gameObject -> !(gameObject instanceof Camera))
+                        .map(object -> Rasterization.lookAt(object, scene.getCurrentCamera()))
+                        .collect(Collectors.toSet())
+        );
+    }
+
+    protected void calculateClipMatrix(){
+        clipMatrix = Rasterization.clip(scene.getCurrentCamera());
+    }
+
+    protected void bakeScene(){
         scene.getObjectCollection().stream().map(GameObject::getMesh).forEach(Mesh::bakeMesh);
     }
 
