@@ -1,5 +1,6 @@
 package com.cgp.graphics.entities;
 
+import com.cgp.graphics.components.BasicTransform;
 import com.cgp.graphics.components.GameObject;
 import com.cgp.graphics.util.Rasterization;
 import com.cgp.math.matrix.Matrix4;
@@ -11,9 +12,9 @@ public class Camera extends GameObject {
     private float NPlane;
     private Matrix4 clipMatrix = null;
 
-    protected Camera() {
+    public Camera() {
         //TODO: provide implementation of transform
-        super(null, null, null);
+        super(new BasicTransform(), null, null);
     }
 
     public float getFOV() {

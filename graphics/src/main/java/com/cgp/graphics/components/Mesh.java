@@ -7,13 +7,14 @@ import com.cgp.math.vector.Vector3F;
 import com.cgp.math.vector.Vector4F;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class Mesh {
     protected final List<Polygon> polygons;
-    protected final HashMap<Vector3F, Vector3F> vertexNormalMap = new HashMap<>();
-    protected final HashMap<Vector3F, List<Polygon>> vertexPolygonMap = new HashMap<>();
-    protected final HashMap<Polygon, Vector3F> polygonNormalMap = new HashMap<>();
+    protected final ConcurrentHashMap<Vector3F, Vector3F> vertexNormalMap = new ConcurrentHashMap<>();
+    protected final ConcurrentHashMap<Vector3F, List<Polygon>> vertexPolygonMap = new ConcurrentHashMap<>();
+    protected final ConcurrentHashMap<Polygon, Vector3F> polygonNormalMap = new ConcurrentHashMap<>();
     protected ArrayList<Polygon> triangulatedPolygons = new ArrayList<>();
     protected Map<Vector3F, Vector4F> vertices4;
 
@@ -78,15 +79,15 @@ public class Mesh {
         return polygons;
     }
 
-    public HashMap<Vector3F, Vector3F> getVertexNormalMap() {
+    public ConcurrentHashMap<Vector3F, Vector3F> getVertexNormalMap() {
         return vertexNormalMap;
     }
 
-    public HashMap<Vector3F, List<Polygon>> getVertexPolygonMap() {
+    public ConcurrentHashMap<Vector3F, List<Polygon>> getVertexPolygonMap() {
         return vertexPolygonMap;
     }
 
-    public HashMap<Polygon, Vector3F> getPolygonNormalMap() {
+    public ConcurrentHashMap<Polygon, Vector3F> getPolygonNormalMap() {
         return polygonNormalMap;
     }
 

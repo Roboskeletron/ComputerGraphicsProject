@@ -1,14 +1,14 @@
 package com.cgp.ui;
 
 import javafx.fxml.FXML;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
 
 public class HelloController {
     @FXML
-    private Label welcomeText;
+    private Canvas mainCanvas;
 
-    @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
+    public Canvas getMainCanvas() {
+        return mainCanvas;
     }
 }

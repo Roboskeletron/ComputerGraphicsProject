@@ -8,7 +8,7 @@ public class Scene {
     private final Collection<GameObject> objectCollection;
     private Camera currentCamera;
 
-    protected Scene(Collection<GameObject> objectCollection) {
+    public Scene(Collection<GameObject> objectCollection) {
         this.objectCollection = objectCollection;
     }
 
@@ -21,6 +21,6 @@ public class Scene {
     }
 
     public void bakeScene(){
-        objectCollection.stream().map(GameObject::getMesh).forEach(Mesh::bakeMesh);
+        objectCollection.stream().filter(gameObject -> !(gameObject instanceof Camera)).map(GameObject::getMesh).forEach(Mesh::bakeMesh);
     }
 }
