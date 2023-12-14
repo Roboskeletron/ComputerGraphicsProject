@@ -1,7 +1,6 @@
 package com.cgp.graphics.pipeline;
 
 import com.cgp.graphics.components.GameObject;
-import com.cgp.graphics.components.Mesh;
 import com.cgp.graphics.components.Scene;
 import com.cgp.graphics.entities.Camera;
 import com.cgp.graphics.primitives.Transform;
@@ -76,7 +75,10 @@ public class BasicPipeline  implements Pipeline {
     }
 
     protected void bakeScene(){
-        scene.getObjectCollection().stream().map(GameObject::getMesh).forEach(Mesh::bakeMesh);
+        scene.bakeScene();
+        modelMatrices.clear();
+        viewMatrices.clear();
+        clipMatrix = null;
     }
 
     public Scene getScene() {

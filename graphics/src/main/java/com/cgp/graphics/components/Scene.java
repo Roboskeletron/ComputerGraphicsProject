@@ -19,4 +19,8 @@ public class Scene {
     public Camera getCurrentCamera() {
         return currentCamera;
     }
+
+    public void bakeScene(){
+        objectCollection.stream().map(GameObject::getMesh).forEach(Mesh::bakeMesh);
+    }
 }
