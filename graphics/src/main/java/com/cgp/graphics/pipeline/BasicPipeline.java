@@ -9,13 +9,13 @@ import com.cgp.math.AffineTransform.AffineTransform;
 import com.cgp.math.matrix.Matrix4;
 import javafx.scene.canvas.GraphicsContext;
 
-import java.util.HashSet;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-public class BasicPipeline  implements Pipeline {
+public class BasicPipeline implements Pipeline {
     private Scene scene;
-    private final HashSet<Matrix4> modelMatrices = new HashSet<>();
-    private final HashSet<Matrix4> viewMatrices = new HashSet<>();
+    private Map<GameObject, Matrix4> modelMatrices;
+    private Map<GameObject, Matrix4> viewMatrices;
     private Matrix4 clipMatrix = null;
 
     public BasicPipeline(Scene scene) {
@@ -24,20 +24,16 @@ public class BasicPipeline  implements Pipeline {
 
     @Override
     public void drawScene(GraphicsContext graphicsContext) {
-        if (modelMatrices.isEmpty()){
-            calculateModelMatrices();
-        }
+        modelMatrices = modelMatrices == null ? calculateModelMatrices() : modelMatrices;
 
-        if (viewMatrices.isEmpty()){
-            calculateViewMatrices();
-        }
+        viewMatrices = modelMatrices == null ? calculateViewMatrices() : viewMatrices;
 
-        if (clipMatrix == null){
-            calculateClipMatrix();
-        }
+        clipMatrix = clipMatrix == null ? calculateClipMatrix() : clipMatrix;
+
+
     }
 
-    protected AffineTransform applyAffineTransform(Transform transform){
+    protected AffineTransform applyAffineTransform(Transform transform) {
         AffineTransform affineTransform = new AffineTransform();
 
         var position = transform.getPosition();
@@ -51,33 +47,35 @@ public class BasicPipeline  implements Pipeline {
         return affineTransform;
     }
 
-    protected void calculateModelMatrices(){
-        modelMatrices.addAll(scene.getObjectCollection().stream()
+    protected Map<GameObject, Matrix4> calculateModelMatrices() {
+        return scene.getObjectCollection().stream()
                 .filter(gameObject -> !(gameObject instanceof Camera))
-                .map(GameObject::getTransform)
-                .map(this::applyAffineTransform)
-                .map(AffineTransform::getTransformationMatrix)
-                .collect(Collectors.toSet())
-        );
+                .collect(Collectors.toMap(
+                                gameObject -> gameObject,
+                                gameObject -> applyAffineTransform(gameObject.getTransform())
+                                        .getTransformationMatrix()
+                        )
+                );
     }
 
-    protected void calculateViewMatrices(){
-        viewMatrices.addAll(
-                scene.getObjectCollection().stream()
-                        .filter(gameObject -> !(gameObject instanceof Camera))
-                        .map(object -> Rasterization.lookAt(object, scene.getCurrentCamera()))
-                        .collect(Collectors.toSet())
-        );
+    protected Map<GameObject, Matrix4> calculateViewMatrices() {
+        return scene.getObjectCollection().stream()
+                .filter(gameObject -> !(gameObject instanceof Camera))
+                .collect(Collectors.toMap(
+                                gameObject -> gameObject,
+                                gameObject -> Rasterization.lookAt(gameObject, scene.getCurrentCamera())
+                        )
+                );
     }
 
-    protected void calculateClipMatrix(){
-        clipMatrix = Rasterization.clip(scene.getCurrentCamera());
+    protected Matrix4 calculateClipMatrix() {
+        return Rasterization.clip(scene.getCurrentCamera());
     }
 
-    protected void bakeScene(){
+    protected void bakeScene() {
         scene.bakeScene();
-        modelMatrices.clear();
-        viewMatrices.clear();
+        modelMatrices = null;
+        viewMatrices = null;
         clipMatrix = null;
     }
 

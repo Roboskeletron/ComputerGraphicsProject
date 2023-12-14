@@ -9,10 +9,10 @@ import com.cgp.math.vector.Vector4F;
 
 public class Rasterization {
     public static Matrix4 lookAt(GameObject target, Camera camera) {
-        Transform targetTransfrom = target.getTransform();
+        Transform targetTransform = target.getTransform();
         Transform cameraTransform = camera.getTransform();
 
-        var z = targetTransfrom.getPosition().subtract(cameraTransform.getPosition());
+        var z = targetTransform.getPosition().subtract(cameraTransform.getPosition());
         var up = new Vector3F(0, 1, 0);
         var x = up.crossProduct(z);
 

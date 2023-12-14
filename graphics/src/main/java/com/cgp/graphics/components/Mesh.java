@@ -4,11 +4,9 @@ import com.cgp.graphics.primitives.Polygon;
 import com.cgp.graphics.util.Normal;
 import com.cgp.graphics.util.Triangulation;
 import com.cgp.math.vector.Vector3F;
+import com.cgp.math.vector.Vector4F;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Mesh {
@@ -17,12 +15,17 @@ public class Mesh {
     protected final HashMap<Vector3F, List<Polygon>> vertexPolygonMap = new HashMap<>();
     protected final HashMap<Polygon, Vector3F> polygonNormalMap = new HashMap<>();
     protected ArrayList<Polygon> triangulatedPolygons = new ArrayList<>();
+    protected Map<Vector3F, Vector4F> vertices4;
 
     public Mesh(List<Polygon> polygons) {
         this.polygons = polygons;
     }
 
     public void bakeMesh() {
+        bakeVertices();
+    }
+
+    private void bakeVertices() {
         triangulatedPolygons.clear();
         vertexNormalMap.clear();
         polygonNormalMap.clear();
@@ -45,6 +48,13 @@ public class Mesh {
                         )
                 )
         );
+
+        vertices4 = vertexNormalMap.keySet().stream()
+                .collect(Collectors.toMap(
+                                vertex -> vertex,
+                                vertex -> new Vector4F(vertex.getX(), vertex.getY(), vertex.getZ(), 1)
+                        )
+                );
     }
 
     private void mapVerticesToPolygons(Polygon polygon) {
@@ -82,5 +92,9 @@ public class Mesh {
 
     public ArrayList<Polygon> getTriangulatedPolygons() {
         return triangulatedPolygons;
+    }
+
+    public Map<Vector3F, Vector4F> getVertices4() {
+        return vertices4;
     }
 }
