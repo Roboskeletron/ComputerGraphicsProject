@@ -11,7 +11,6 @@ import com.cgp.graphics.primitives.Polygon;
 import com.cgp.math.vector.Vector3F;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.stage.Stage;
@@ -25,7 +24,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 800, 800);
+        Scene scene = new Scene(fxmlLoader.load(), 400, 400);
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
@@ -33,10 +32,17 @@ public class HelloApplication extends Application {
         HelloController controller = fxmlLoader.getController();
 
         Canvas canvas = controller.getMainCanvas();
+        canvas.setWidth(400);
+        canvas.setHeight(400);
 
         ArrayList<GameObject> objects = new ArrayList<>();
 
-        objects.add(new Camera());
+        var camera = new Camera();
+        objects.add(camera);
+        camera.setAspectRatio(1);
+        camera.setFOV((float) (Math.PI / 2));
+        camera.setNPlane(0);
+        camera.setNPlane(100);
 
         ArrayList<Polygon> polygons = new ArrayList<>();
         var a = new Vector3F(0, 0, 0);
@@ -68,7 +74,10 @@ public class HelloApplication extends Application {
                 .build());
 
         Mesh mesh = new Mesh(polygons);
-        objects.add(new Model3D(new BasicTransform(), mesh, null));
+        BasicTransform transform = new BasicTransform();
+        objects.add(new Model3D(transform, mesh, null));
+
+        transform.setPosition(new Vector3F(1, 1, 1));
 
         com.cgp.graphics.components.Scene myScene = new com.cgp.graphics.components.Scene(objects);
         pipelie = new BasicPipeline(myScene);
