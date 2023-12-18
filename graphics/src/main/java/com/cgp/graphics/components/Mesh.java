@@ -16,7 +16,6 @@ public class Mesh {
     protected final ConcurrentHashMap<Vector3F, Vector3F> vertexNormalMap = new ConcurrentHashMap<>();
     protected final ConcurrentHashMap<Vector3F, List<Polygon>> vertexPolygonMap = new ConcurrentHashMap<>();
     protected final ConcurrentHashMap<Polygon, Vector3F> polygonNormalMap = new ConcurrentHashMap<>();
-    protected final ConcurrentHashMap<Polygon, BarycentricCoordinates> polygonBarycentricCoordinatesMap = new ConcurrentHashMap<>();
     protected ArrayList<Polygon> triangulatedPolygons = new ArrayList<>();
     protected Map<Vector3F, Vector4F> vertices4;
 
@@ -33,27 +32,19 @@ public class Mesh {
         vertexNormalMap.clear();
         polygonNormalMap.clear();
         vertexPolygonMap.clear();
-        polygonBarycentricCoordinatesMap.clear();
 
         polygons.stream().map(Triangulation::basic).forEach(polygons ->
                 polygons.stream().forEachOrdered(this::mapVerticesToPolygons)
         );
 
-        polygonBarycentricCoordinatesMap.putAll(triangulatedPolygons.stream().collect(Collectors.toMap(
-                                polygon -> polygon,
-                                BarycentricCoordinates::fromPolygon
-                        )
-                )
-        );
-
-        polygonNormalMap.putAll(triangulatedPolygons.stream().collect(Collectors.toMap(
+        polygonNormalMap.putAll(triangulatedPolygons.stream().collect(Collectors.toConcurrentMap(
                                 polygon -> polygon,
                                 Normal::getPolygonNormal
                         )
                 )
         );
 
-        vertexNormalMap.putAll(vertexPolygonMap.keySet().stream().collect(Collectors.toMap(
+        vertexNormalMap.putAll(vertexPolygonMap.keySet().stream().collect(Collectors.toConcurrentMap(
                                 vertex -> vertex,
                                 vertex -> Normal.getVertexNormal(vertex, vertexPolygonMap, polygonNormalMap)
                         )
@@ -61,7 +52,7 @@ public class Mesh {
         );
 
         vertices4 = vertexNormalMap.keySet().stream()
-                .collect(Collectors.toMap(
+                .collect(Collectors.toConcurrentMap(
                                 vertex -> vertex,
                                 vertex -> new Vector4F(vertex.getX(), vertex.getY(), vertex.getZ(), 1)
                         )
@@ -107,9 +98,5 @@ public class Mesh {
 
     public Map<Vector3F, Vector4F> getVertices4() {
         return vertices4;
-    }
-
-    public Map<Polygon, BarycentricCoordinates> getPolygonBarycentricCoordinatesMap() {
-        return polygonBarycentricCoordinatesMap;
     }
 }
