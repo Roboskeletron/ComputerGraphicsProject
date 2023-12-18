@@ -69,6 +69,11 @@ public class Vector3F {
 
     public Vector3F normalize() {
         float magnitude = this.magnitude();
+
+        if (magnitude == 0){
+            return new Vector3F(0, 0, 0);
+        }
+
         return new Vector3F(this.x / magnitude, this.y / magnitude, this.z / magnitude);
     }
 
