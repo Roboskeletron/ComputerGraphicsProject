@@ -31,14 +31,14 @@ public class BarycentricCoordinates {
         }
     }
 
-    public static BarycentricCoordinates fromPolygon(Polygon polygon){
+    public static BarycentricCoordinates fromPolygon(Polygon polygon, Map<Vector3F, Vector3F> vertexScreenPointMap){
         if (polygon.getVertexCount() != 3){
             throw new IllegalArgumentException("Polygon must be triangulated");
         }
 
-        var a = polygon.getVertex(0);
-        var b = polygon.getVertex(1);
-        var c = polygon.getVertex(2);
+        var a = vertexScreenPointMap.get(polygon.getVertex(0));
+        var b = vertexScreenPointMap.get(polygon.getVertex(1));
+        var c = vertexScreenPointMap.get(polygon.getVertex(2));
 
         return new BarycentricCoordinates(a, b, c);
     }
