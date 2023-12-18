@@ -1,5 +1,6 @@
 package com.cgp.graphics.util;
 
+import com.cgp.graphics.primitives.Polygon;
 import com.cgp.math.matrix.Matrix3;
 import com.cgp.math.vector.Vector3F;
 
@@ -20,6 +21,18 @@ public class BarycentricCoordinates {
                 {1, 1, 1}
         })
                 .inverse();
+    }
+
+    public static BarycentricCoordinates fromPolygon(Polygon polygon){
+        if (polygon.getVertexCount() != 3){
+            throw new IllegalArgumentException("Polygon must be triangulated");
+        }
+
+        var a = polygon.getVertex(0);
+        var b = polygon.getVertex(1);
+        var c = polygon.getVertex(2);
+
+        return new BarycentricCoordinates(a, b, c);
     }
 
     public Vector3F getBarycentricVector(Vector3F point) {
