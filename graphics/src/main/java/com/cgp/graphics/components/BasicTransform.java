@@ -30,6 +30,18 @@ public class BasicTransform implements Transform
         return scale;
     }
 
+    public void setPosition(Vector3F position) {
+        this.position = position;
+    }
+
+    public void setRotation(Vector3F rotation) {
+        this.rotation = rotation;
+    }
+
+    public void setScale(Vector3F scale) {
+        this.scale = scale;
+    }
+
     @Override
     public Matrix4 toWorldCoordinates() {
         return null;
