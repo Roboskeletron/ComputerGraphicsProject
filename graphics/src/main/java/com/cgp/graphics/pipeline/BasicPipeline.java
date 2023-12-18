@@ -12,8 +12,10 @@ import com.cgp.math.vector.Vector3F;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class BasicPipeline implements Pipeline {
@@ -21,7 +23,7 @@ public class BasicPipeline implements Pipeline {
     private Map<GameObject, Matrix4> modelMatrices;
     private Map<GameObject, Matrix4> viewMatrices;
     private Matrix4 clipMatrix;
-    private Set<Vector3F> vertices2D;
+    private ConcurrentHashMap<Vector3F, Vector3F> vertices2D3DMap;
 
     public BasicPipeline(Scene scene) {
         setScene(scene);
@@ -30,7 +32,7 @@ public class BasicPipeline implements Pipeline {
     @Override
     public void drawScene(GraphicsContext graphicsContext) {
         var canvas = graphicsContext.getCanvas();
-        ZBuffer.filterPoints(vertices2D).stream()
+        ZBuffer.filterPoints(vertices2D3DMap.values()).stream()
                 .map(point -> Rasterization.toScreenCoordinates(point,
                                 (float) canvas.getWidth(),
                                 (float) canvas.getHeight()
@@ -50,22 +52,31 @@ public class BasicPipeline implements Pipeline {
         viewMatrices = calculateViewMatrices();
         clipMatrix = calculateClipMatrix();
 
-        vertices2D = calculateVertices2D();
+        vertices2D3DMap = (ConcurrentHashMap<Vector3F, Vector3F>) calculateVertices2D();
     }
 
-    private Set<Vector3F> calculateVertices2D() {
+    private Map<Vector3F, Vector3F> calculateVertices2D() {
         return scene.getObjectCollection().stream()
                 .filter(gameObject -> !(gameObject instanceof Camera))
-                .flatMap(gameObject -> gameObject.getMesh().getVertices4()
-                        .values().stream().map(vertex -> Rasterization
-                                .vertexToNormalizedScreen(vertex,
-                                        clipMatrix,
-                                        viewMatrices.get(gameObject),
-                                        modelMatrices.get(gameObject)
+                .flatMap(gameObject -> gameObject
+                        .getMesh()
+                        .getVertices4()
+                        .entrySet()
+                        .stream()
+                        .map(entry -> new AbstractMap.SimpleEntry<>(
+                                        entry.getKey(),
+                                        Rasterization.vertexToNormalizedScreen(entry.getValue(),
+                                                clipMatrix,
+                                                viewMatrices.get(gameObject),
+                                                modelMatrices.get(gameObject)
+                                        )
                                 )
                         )
                 )
-                .collect(Collectors.toSet());
+                .collect(Collectors.toConcurrentMap(
+                        AbstractMap.SimpleEntry::getKey,
+                        AbstractMap.SimpleEntry::getValue
+                ));
     }
 
     protected AffineTransform applyAffineTransform(Transform transform) {
@@ -85,7 +96,7 @@ public class BasicPipeline implements Pipeline {
     protected Map<GameObject, Matrix4> calculateModelMatrices() {
         return scene.getObjectCollection().stream()
                 .filter(gameObject -> !(gameObject instanceof Camera))
-                .collect(Collectors.toMap(
+                .collect(Collectors.toConcurrentMap(
                                 gameObject -> gameObject,
                                 gameObject -> applyAffineTransform(gameObject.getTransform())
                                         .getTransformationMatrix()
@@ -96,7 +107,7 @@ public class BasicPipeline implements Pipeline {
     protected Map<GameObject, Matrix4> calculateViewMatrices() {
         return scene.getObjectCollection().stream()
                 .filter(gameObject -> !(gameObject instanceof Camera))
-                .collect(Collectors.toMap(
+                .collect(Collectors.toConcurrentMap(
                                 gameObject -> gameObject,
                                 gameObject -> Rasterization.lookAt(gameObject, scene.getCurrentCamera())
                         )
