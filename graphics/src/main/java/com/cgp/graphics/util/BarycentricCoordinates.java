@@ -15,12 +15,20 @@ public class BarycentricCoordinates {
         this.b = b;
         this.c = c;
 
-        matrix = new Matrix3(new float[][]{
-                {a.getX(), b.getX(), c.getX()},
-                {a.getY(), b.getY(), c.getY()},
-                {1, 1, 1}
-        })
-                .inverse();
+        Matrix3 matrix = null;
+        try {
+            matrix = new Matrix3(new float[][]{
+                    {a.getX(), b.getX(), c.getX()},
+                    {a.getY(), b.getY(), c.getY()},
+                    {1, 1, 1}
+            })
+                    .inverse();
+        }
+        catch (ArithmeticException ignored){
+        }
+        finally {
+            this.matrix = matrix;
+        }
     }
 
     public static BarycentricCoordinates fromPolygon(Polygon polygon){
@@ -36,6 +44,10 @@ public class BarycentricCoordinates {
     }
 
     public Vector3F getBarycentricVector(Vector3F point) {
+        if (matrix == null){
+            return new Vector3F(-1, -1,  -1);
+        }
+
         return matrix.multiplyVector3(
                 new Vector3F(
                         point.getX(),
