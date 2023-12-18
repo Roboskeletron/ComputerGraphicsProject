@@ -22,5 +22,12 @@ public class Scene {
 
     public void bakeScene(){
         objectCollection.stream().filter(gameObject -> !(gameObject instanceof Camera)).map(GameObject::getMesh).forEach(Mesh::bakeMesh);
+        var optionalCamera = objectCollection.stream().filter(gameObject -> gameObject instanceof Camera).findFirst();
+
+        if (optionalCamera.isEmpty()){
+            throw new NullPointerException("Scene has no camera");
+        }
+
+        currentCamera = (Camera) optionalCamera.get();
     }
 }
