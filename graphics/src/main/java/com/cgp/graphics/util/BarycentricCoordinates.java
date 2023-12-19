@@ -4,6 +4,8 @@ import com.cgp.graphics.primitives.Polygon;
 import com.cgp.math.matrix.Matrix3;
 import com.cgp.math.vector.Vector3F;
 
+import java.util.Map;
+
 public class BarycentricCoordinates {
     private final Vector3F a;
     private final Vector3F b;
