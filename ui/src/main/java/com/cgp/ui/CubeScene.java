@@ -19,31 +19,31 @@ public class CubeScene {
 
         ArrayList<Polygon> polygons = new ArrayList<>();
         var a = new Vector3F(0, 0, 0);
-        var b = new Vector3F(1, 0, 0);
+        var b = new Vector3F(0, 1, 0);
         var c = new Vector3F(1, 1, 0);
-        var d = new Vector3F(0, 1, 0);
+        var d = new Vector3F(1, 0, 0);
         var e = new Vector3F(0, 0, 1);
-        var f = new Vector3F(1, 0, 1);
+        var f = new Vector3F(0, 1, 1);
         var g = new Vector3F(1, 1, 1);
-        var h = new Vector3F(0, 1, 1);
+        var h = new Vector3F(1, 0, 1);
 
         polygons.add(new Polygon.Builder()
-                .withVertices(a, b, c, d)
+                .withVertices(c, g, h, d)
                 .build());
         polygons.add(new Polygon.Builder()
-                .withVertices(e, f, g, h)
+                .withVertices(a, e, f, b)
                 .build());
         polygons.add(new Polygon.Builder()
-                .withVertices(a, b, e, f)
+                .withVertices(g, c, b, f)
                 .build());
         polygons.add(new Polygon.Builder()
-                .withVertices(c, d, g, h)
+                .withVertices(d, h, e, a)
                 .build());
         polygons.add(new Polygon.Builder()
-                .withVertices(a, d, e, h)
+                .withVertices(h, g, f, e)
                 .build());
         polygons.add(new Polygon.Builder()
-                .withVertices(b, c, f, g)
+                .withVertices(c, d, a, b)
                 .build());
 
         Mesh mesh = new Mesh(polygons);
