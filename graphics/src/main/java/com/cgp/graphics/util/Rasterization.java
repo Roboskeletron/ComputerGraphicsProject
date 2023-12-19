@@ -12,7 +12,7 @@ public class Rasterization {
         Transform targetTransform = target.getTransform();
         Transform cameraTransform = camera.getTransform();
 
-        var z = targetTransform.getPosition().subtract(cameraTransform.getPosition());
+        var z = cameraTransform.getRotation().subtract(cameraTransform.getPosition());
         var up = new Vector3F(0, 1, 0);
         var x = up.crossProduct(z);
 
@@ -21,21 +21,21 @@ public class Rasterization {
         z = z.normalize();
 
         return new Matrix4(new float[][]{
-                {x.getX(), x.getY(), x.getZ(), -cameraTransform.getPosition().getX()},
-                {y.getX(), y.getY(), y.getZ(), -cameraTransform.getPosition().getY()},
-                {z.getX(), z.getY(), z.getZ(), -cameraTransform.getPosition().getZ()},
+                {x.getX(), x.getY(), x.getZ(), -x.dotProduct(cameraTransform.getPosition())},
+                {y.getX(), y.getY(), y.getZ(), -y.dotProduct(cameraTransform.getPosition())},
+                {z.getX(), z.getY(), z.getZ(), -z.dotProduct(cameraTransform.getPosition())},
                 {0, 0, 0, 1}
         });
     }
 
     public static Matrix4 clip(Camera camera) {
-        float atanFov = (float) Math.atan(camera.getFOV());
+        float tanFov = 1f / (float) Math.tan(camera.getFOV() * 0.5);
         float difference = camera.getFPlane() - camera.getNPlane();
         return new Matrix4(new float[][]{
-                {atanFov, 0, 0, 0},
-                {0, atanFov / camera.getAspectRatio(), 0, 0},
+                {tanFov, 0, 0, 0},
+                {0, tanFov / camera.getAspectRatio(), 0, 0},
                 {0, 0, (camera.getFPlane() + camera.getNPlane()) / difference, 2 * camera.getFPlane() * camera.getNPlane() / -difference},
-                {0, 0, 1, 0}
+                {0, 0, 1f, 0}
         });
     }
 
