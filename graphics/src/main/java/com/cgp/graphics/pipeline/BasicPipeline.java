@@ -3,9 +3,9 @@ package com.cgp.graphics.pipeline;
 import com.cgp.graphics.components.GameObject;
 import com.cgp.graphics.components.Scene;
 import com.cgp.graphics.entities.Camera;
-import com.cgp.graphics.primitives.Polygon;
 import com.cgp.graphics.primitives.Transform;
 import com.cgp.graphics.util.BarycentricCoordinates;
+import com.cgp.graphics.primitives.BarycentricVector;
 import com.cgp.graphics.util.Rasterization;
 import com.cgp.graphics.util.ZBuffer;
 import com.cgp.math.AffineTransform.AffineTransform;
@@ -21,7 +21,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class BasicPipeline implements Pipeline {
     private Scene scene;
@@ -54,36 +53,52 @@ public class BasicPipeline implements Pipeline {
     }
 
     protected void rasterization(Map<Vector3F, Vector3F> points, GraphicsContext graphicsContext) {
+        if (points.isEmpty()) {
+            return;
+        }
+
         var barycentricCoordinates = calculateBarycentricCoordinates(points);
 
-        var width = graphicsContext.getCanvas().getWidth();
-        var height = graphicsContext.getCanvas().getHeight();
+        int minX = points.values().stream()
+                .map(Vector3F::getX)
+                .mapToInt(Math::round)
+                .min().orElseThrow();
 
-        IntStream.range(0, (int) (width + 1))
-                .forEach(x -> IntStream.range(0, (int) (height + 1))
-                        .forEach(y -> {
-                                    var lambdaVector = getLambdaVector(x, y, barycentricCoordinates);
+        int maxX = points.values().stream()
+                .map(Vector3F::getX)
+                .mapToInt(Math::round)
+                .max().orElseThrow();
 
-                                    if (lambdaVector.isPresent()){
-                                        drawPixel(x, y, graphicsContext.getPixelWriter());
-                                    }
-                                }
+        int minY = points.values().stream()
+                .map(Vector3F::getY)
+                .mapToInt(Math::round)
+                .min().orElseThrow();
+
+        int maxY = points.values().stream()
+                .map(Vector3F::getY)
+                .mapToInt(Math::round)
+                .max().orElseThrow();
+
+        var baryPoints = IntStream.range(minX, maxX + 1)
+                .mapToObj(x -> IntStream.range(minY, maxY + 1)
+                        .mapToObj(y -> new Vector3F(x, y, 0)
                         )
-                );
-    }
-
-    protected Optional<Vector3F> getLambdaVector(int x, int y, Set<BarycentricCoordinates> barycentricCoordinates) {
-        return barycentricCoordinates.stream()
-                .map(coordinates -> coordinates.getBarycentricVector(
-                        new Vector3F(x, y, 1))
                 )
-                .filter(vector -> vector.getX() >= 0 && vector.getY() >= 0 && vector.getZ() >= 0)
-                .findFirst();
+                .flatMap(vector -> vector)
+                .flatMap(point -> barycentricCoordinates.stream()
+                        .map(coordinates -> new BarycentricVector(coordinates, point))
+                        .filter(vector -> vector.getLambdaVector().getX() >= 0 && vector.getLambdaVector().getY() >= 0 && vector.getLambdaVector().getZ() >= 0)
+                )
+                .toList();
+
+        ZBuffer.filterPoints(baryPoints).forEach(point -> drawPoint(point, graphicsContext));
     }
 
-    protected void drawPixel(int x, int y, PixelWriter pixelWriter){
-        pixelWriter.setColor(x, y, Color.RED);
-     }
+    protected <Point extends Vector3F> void drawPoint(Point point, GraphicsContext graphicsContext){
+        int x = (int) point.getX();
+        int y = (int) point.getY();
+        graphicsContext.getPixelWriter().setColor(x, y, Color.RED);
+    }
 
     protected Set<BarycentricCoordinates> calculateBarycentricCoordinates(Map<Vector3F, Vector3F> points) {
         return scene.getObjectCollection().stream()
@@ -99,7 +114,7 @@ public class BasicPipeline implements Pipeline {
     }
 
     protected ConcurrentMap<Vector3F, Vector3F> calculateScreenPoints(Canvas canvas) {
-        return ZBuffer.filterPoints(vertices2D3DMap).stream()
+        return vertices2D3DMap.entrySet().stream()
                 .collect(Collectors.toConcurrentMap(
                         Map.Entry::getKey,
                         entry -> Rasterization.toScreenCoordinates(entry.getValue(),

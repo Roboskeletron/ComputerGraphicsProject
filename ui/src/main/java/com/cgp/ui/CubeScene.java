@@ -50,8 +50,9 @@ public class CubeScene {
         BasicTransform transform = new BasicTransform();
         objects.add(new Model3D(transform, mesh, null));
 
-        transform.setPosition(new Vector3F(1, 1, 1));
-        transform.setRotation(new Vector3F(0, (float) (Math.PI / 3), 0));
+        transform.setPosition(new Vector3F(2, 0, 0));
+        transform.setRotation(new Vector3F((float) (Math.PI / 6), (float) (Math.PI / 3), 0));
+        transform.setScale(new Vector3F(0.8f, 0.8f, 0.8f));
 
         return new Scene(objects);
     }

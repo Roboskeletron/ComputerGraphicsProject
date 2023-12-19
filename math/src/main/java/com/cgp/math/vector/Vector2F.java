@@ -68,4 +68,12 @@ public class Vector2F {
 
         return false;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = (int) (19 * hash + x);
+        hash = (int) (19 * hash + y);
+        return hash;
+    }
 }

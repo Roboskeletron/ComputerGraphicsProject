@@ -3,6 +3,7 @@ package com.cgp.ui;
 import com.cgp.graphics.components.BasicTransform;
 import com.cgp.graphics.entities.Camera;
 import com.cgp.graphics.pipeline.BasicPipeline;
+import com.cgp.graphics.pipeline.MeshPipeline;
 import com.cgp.graphics.pipeline.Pipeline;
 import com.cgp.math.vector.Vector3F;
 import javafx.animation.AnimationTimer;
@@ -26,9 +27,10 @@ public class HelloController {
 
     public HelloController() {
         camera.setAspectRatio(1);
-        camera.setFOV((float) (Math.PI / 2));
-        camera.setNPlane(0);
-        camera.setNPlane(100);
+        camera.setFOV(1f);
+        camera.setNPlane(0.01f);
+        camera.setFPlane(100);
+        ((BasicTransform) camera.getTransform()).setPosition(new Vector3F(-5, 0, 0));
     }
 
     @FXML
@@ -47,12 +49,13 @@ public class HelloController {
 
         var scene = CubeScene.createScene(camera);
 
-        pipeline = new BasicPipeline(scene);
+        pipeline = new MeshPipeline(scene);
 
         timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 pipeline.drawScene(mainCanvas.getGraphicsContext2D());
+//                pipeline.run();
             }
         };
 
@@ -63,21 +66,31 @@ public class HelloController {
 
     private void handleKeyEvent(KeyEvent keyEvent) {
         var translationVector = new Vector3F(0, 0 ,0);
-        var direction = camera.getTransform().getRotation();
+        var rotationVector = new Vector3F(0, 0, 0);
 
         switch (keyEvent.getCode()){
             case W -> translationVector.setX(1);
             case S -> translationVector.setX(-1);
-            case D -> translationVector.setY(1);
-            case A -> translationVector.setY(-1);
-            case SPACE -> translationVector.setZ(1);
-            case CONTROL -> translationVector.setZ(-1);
+            case D -> translationVector.setZ(1);
+            case A -> translationVector.setZ(-1);
+            case SPACE -> translationVector.setY(1);
+            case CONTROL -> translationVector.setY(-1);
+
+            case UP -> rotationVector.setX(1);
+            case DOWN -> rotationVector.setX(-1);
+            case RIGHT -> rotationVector.setY(1);
+            case LEFT -> rotationVector.setY(-1);
         }
 
         translationVector = translationVector.scalarMultiply(velocity);
+        rotationVector = rotationVector.scalarMultiply(velocity);
 
-        var position = camera.getTransform().getPosition();
-        ((BasicTransform) camera.getTransform()).setPosition(position.add(translationVector));
+        var position = camera.getTransform().getPosition().add(translationVector);
+        var rotation = camera.getTransform().getRotation().add(rotationVector);
+
+        var transform = (BasicTransform) camera.getTransform();
+        transform.setPosition(position);
+        transform.setRotation(rotation);
 
         pipeline.run();
     }
@@ -102,7 +115,7 @@ public class HelloController {
 
     private void onSizeChanged(double width, double height) {
 
-        float aspectRatio = (float) (height / width);
+        float aspectRatio = (float) (width / height);
 
         camera.setAspectRatio(aspectRatio);
         mainCanvas.setHeight(height);
