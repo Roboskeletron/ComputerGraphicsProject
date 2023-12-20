@@ -59,33 +59,33 @@ public class BasicPipeline implements Pipeline {
 
         var barycentricCoordinates = calculateBarycentricCoordinates(points);
 
-        int minX = points.values().stream()
+        int minX = points.values().parallelStream()
                 .map(Vector3F::getX)
                 .mapToInt(Math::round)
                 .min().orElseThrow();
 
-        int maxX = points.values().stream()
+        int maxX = points.values().parallelStream()
                 .map(Vector3F::getX)
                 .mapToInt(Math::round)
                 .max().orElseThrow();
 
-        int minY = points.values().stream()
+        int minY = points.values().parallelStream()
                 .map(Vector3F::getY)
                 .mapToInt(Math::round)
                 .min().orElseThrow();
 
-        int maxY = points.values().stream()
+        int maxY = points.values().parallelStream()
                 .map(Vector3F::getY)
                 .mapToInt(Math::round)
                 .max().orElseThrow();
 
-        var baryPoints = IntStream.range(minX, maxX + 1)
-                .mapToObj(x -> IntStream.range(minY, maxY + 1)
+        var baryPoints = IntStream.range(minX, maxX + 1).parallel()
+                .mapToObj(x -> IntStream.range(minY, maxY + 1).parallel()
                         .mapToObj(y -> new Vector3F(x, y, 0)
                         )
                 )
                 .flatMap(vector -> vector)
-                .flatMap(point -> barycentricCoordinates.stream()
+                .flatMap(point -> barycentricCoordinates.parallelStream()
                         .map(coordinates -> new BarycentricVector(coordinates, point))
                         .filter(vector -> vector.getLambdaVector().getX() >= 0 && vector.getLambdaVector().getY() >= 0 && vector.getLambdaVector().getZ() >= 0)
                 )
@@ -101,12 +101,12 @@ public class BasicPipeline implements Pipeline {
     }
 
     protected Set<BarycentricCoordinates> calculateBarycentricCoordinates(Map<Vector3F, Vector3F> points) {
-        return scene.getObjectCollection().stream()
+        return scene.getObjectCollection().parallelStream()
                 .filter(gameObject -> !(gameObject instanceof Camera))
                 .flatMap(gameObject -> gameObject.getMesh()
                         .getTriangulatedPolygons()
-                        .stream()
-                        .filter(polygon -> Arrays.stream(polygon.getVertices())
+                        .parallelStream()
+                        .filter(polygon -> Arrays.stream(polygon.getVertices()).parallel()
                                 .allMatch(points::containsKey))
                 )
                 .map(polygon -> BarycentricCoordinates.fromPolygon(polygon, points))
@@ -114,7 +114,7 @@ public class BasicPipeline implements Pipeline {
     }
 
     protected ConcurrentMap<Vector3F, Vector3F> calculateScreenPoints(Canvas canvas) {
-        return vertices2D3DMap.entrySet().stream()
+        return vertices2D3DMap.entrySet().parallelStream()
                 .collect(Collectors.toConcurrentMap(
                         Map.Entry::getKey,
                         entry -> Rasterization.toScreenCoordinates(entry.getValue(),
@@ -125,13 +125,13 @@ public class BasicPipeline implements Pipeline {
     }
 
     protected Map<Vector3F, Vector3F> calculateVertices2D() {
-        return scene.getObjectCollection().stream()
+        return scene.getObjectCollection().parallelStream()
                 .filter(gameObject -> !(gameObject instanceof Camera))
                 .flatMap(gameObject -> gameObject
                         .getMesh()
                         .getVertices4()
                         .entrySet()
-                        .stream()
+                        .parallelStream()
                         .map(entry -> new AbstractMap.SimpleEntry<>(
                                         entry.getKey(),
                                         Rasterization.vertexToNormalizedScreen(entry.getValue(),
@@ -163,7 +163,7 @@ public class BasicPipeline implements Pipeline {
     }
 
     protected Map<GameObject, Matrix4> calculateModelMatrices() {
-        return scene.getObjectCollection().stream()
+        return scene.getObjectCollection().parallelStream()
                 .filter(gameObject -> !(gameObject instanceof Camera))
                 .collect(Collectors.toConcurrentMap(
                                 gameObject -> gameObject,
@@ -174,7 +174,7 @@ public class BasicPipeline implements Pipeline {
     }
 
     protected Map<GameObject, Matrix4> calculateViewMatrices() {
-        return scene.getObjectCollection().stream()
+        return scene.getObjectCollection().parallelStream()
                 .filter(gameObject -> !(gameObject instanceof Camera))
                 .collect(Collectors.toConcurrentMap(
                                 gameObject -> gameObject,
