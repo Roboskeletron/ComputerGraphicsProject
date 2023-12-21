@@ -1,7 +1,7 @@
 package com.cgp.graphics.primitives;
 
 public class Material {
-    private Texture texture;
+    protected Texture texture;
 
     public Texture getTexture() {
         return texture;
