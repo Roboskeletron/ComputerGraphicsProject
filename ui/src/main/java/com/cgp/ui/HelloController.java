@@ -115,7 +115,7 @@ public class HelloController {
 
     private void onSizeChanged(double width, double height) {
 
-        float aspectRatio = (float) (width / height);
+        float aspectRatio = (float) (height / width);
 
         camera.setAspectRatio(aspectRatio);
         mainCanvas.setHeight(height);
