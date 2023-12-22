@@ -1,5 +1,6 @@
 package com.cgp.graphics.util;
 
+import com.cgp.graphics.primitives.BarycentricVector;
 import com.cgp.graphics.primitives.Polygon;
 import com.cgp.math.matrix.Matrix3;
 import com.cgp.math.vector.Vector3F;
@@ -33,7 +34,7 @@ public class BarycentricCoordinates {
         }
     }
 
-    public static BarycentricCoordinates fromPolygon(Polygon polygon, Map<Vector3F, Vector3F> vertexScreenPointMap){
+    public static BarycentricCoordinates fromPolygon(Polygon polygon, Map<? extends Vector3F, ? extends Vector3F> vertexScreenPointMap){
         if (polygon.getVertexCount() != 3){
             throw new IllegalArgumentException("Polygon must be triangulated");
         }
@@ -70,5 +71,9 @@ public class BarycentricCoordinates {
         );
 
         point.setZ(z);
+    }
+
+    public static boolean checkLambdaVector(BarycentricVector vector){
+        return vector.getLambdaVector().getX() >= 0 && vector.getLambdaVector().getY() >= 0 && vector.getLambdaVector().getZ() >= 0;
     }
 }
