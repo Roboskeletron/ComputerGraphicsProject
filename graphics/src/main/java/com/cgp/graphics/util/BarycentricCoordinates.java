@@ -76,4 +76,16 @@ public class BarycentricCoordinates {
     public static boolean checkLambdaVector(BarycentricVector vector){
         return vector.getLambdaVector().getX() >= 0 && vector.getLambdaVector().getY() >= 0 && vector.getLambdaVector().getZ() >= 0;
     }
+
+    public Vector3F getA() {
+        return a;
+    }
+
+    public Vector3F getB() {
+        return b;
+    }
+
+    public Vector3F getC() {
+        return c;
+    }
 }
