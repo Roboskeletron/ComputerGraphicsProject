@@ -89,7 +89,7 @@ public class BasicPipeline implements Pipeline {
                 .flatMap(vector -> vector)
                 .flatMap(point -> barycentricCoordinates.parallelStream()
                         .map(coordinates -> new BarycentricVector(coordinates, point))
-                        .filter(vector -> vector.getLambdaVector().getX() >= 0 && vector.getLambdaVector().getY() >= 0 && vector.getLambdaVector().getZ() >= 0)
+                        .filter(BarycentricCoordinates::checkLambdaVector)
                 )
                 .toList();
 
