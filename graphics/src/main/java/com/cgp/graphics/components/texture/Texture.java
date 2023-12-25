@@ -1,4 +1,4 @@
-package com.cgp.graphics.primitives;
+package com.cgp.graphics.components.texture;
 
 import javafx.scene.paint.Color;
 

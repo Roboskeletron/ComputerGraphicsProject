@@ -36,6 +36,17 @@ public class Polygon {
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 3;
+
+        for (var vertex : vertices){
+            hash = hash * 19 + vertex.hashCode();
+        }
+
+        return hash;
+    }
+
     public static class Builder {
         private final LinkedList<Vector3F> vertices = new LinkedList<>();
 

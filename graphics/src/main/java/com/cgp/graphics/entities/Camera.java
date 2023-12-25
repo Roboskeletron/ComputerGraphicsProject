@@ -1,7 +1,6 @@
 package com.cgp.graphics.entities;
 
-import com.cgp.graphics.components.BasicTransform;
-import com.cgp.graphics.components.GameObject;
+import com.cgp.graphics.components.transform.BasicTransform;
 import com.cgp.graphics.util.Rasterization;
 import com.cgp.math.matrix.Matrix4;
 

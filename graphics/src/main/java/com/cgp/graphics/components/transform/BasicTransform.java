@@ -1,6 +1,6 @@
-package com.cgp.graphics.components;
+package com.cgp.graphics.components.transform;
 
-import com.cgp.graphics.primitives.Transform;
+import com.cgp.graphics.components.transform.Transform;
 import com.cgp.math.matrix.Matrix4;
 import com.cgp.math.vector.Vector3F;
 

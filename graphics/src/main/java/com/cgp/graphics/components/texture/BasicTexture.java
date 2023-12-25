@@ -1,6 +1,6 @@
-package com.cgp.graphics.components;
+package com.cgp.graphics.components.texture;
 
-import com.cgp.graphics.primitives.Texture;
+import com.cgp.graphics.components.texture.Texture;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 

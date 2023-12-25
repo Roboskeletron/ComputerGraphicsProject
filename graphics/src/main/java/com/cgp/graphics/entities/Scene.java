@@ -1,6 +1,6 @@
-package com.cgp.graphics.components;
+package com.cgp.graphics.entities;
 
-import com.cgp.graphics.entities.Camera;
+import com.cgp.graphics.components.Mesh;
 
 import java.util.Collection;
 

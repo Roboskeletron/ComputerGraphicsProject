@@ -1,8 +1,8 @@
 package com.cgp.graphics.util;
 
-import com.cgp.graphics.components.GameObject;
+import com.cgp.graphics.entities.GameObject;
 import com.cgp.graphics.entities.Camera;
-import com.cgp.graphics.primitives.Transform;
+import com.cgp.graphics.components.transform.Transform;
 import com.cgp.math.matrix.Matrix4;
 import com.cgp.math.vector.Vector3F;
 import com.cgp.math.vector.Vector4F;

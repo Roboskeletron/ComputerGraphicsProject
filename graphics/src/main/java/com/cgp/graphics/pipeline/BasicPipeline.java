@@ -1,10 +1,10 @@
 package com.cgp.graphics.pipeline;
 
-import com.cgp.graphics.components.GameObject;
-import com.cgp.graphics.components.Scene;
+import com.cgp.graphics.entities.GameObject;
+import com.cgp.graphics.entities.Scene;
 import com.cgp.graphics.entities.Camera;
 import com.cgp.graphics.primitives.BarycentricVector;
-import com.cgp.graphics.primitives.Transform;
+import com.cgp.graphics.components.transform.Transform;
 import com.cgp.graphics.util.BarycentricCoordinates;
 import com.cgp.graphics.util.Rasterization;
 import com.cgp.graphics.util.ZBuffer;
@@ -104,6 +104,7 @@ public class BasicPipeline implements Pipeline {
 
     protected Set<BarycentricCoordinates> calculateBarycentricCoordinates(Map<Vector3F, Vector3F> points) {
         return scene.getObjectCollection().parallelStream()
+                //TODO: add game object filter
                 .filter(gameObject -> !(gameObject instanceof Camera))
                 .flatMap(gameObject -> gameObject.getMesh()
                         .getTriangulatedPolygons()
