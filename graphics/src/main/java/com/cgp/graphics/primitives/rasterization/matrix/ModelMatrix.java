@@ -1,4 +1,4 @@
-package com.cgp.graphics.primitives.rasterization;
+package com.cgp.graphics.primitives.rasterization.matrix;
 
 import com.cgp.graphics.entities.GameObject;
 import com.cgp.graphics.util.AffineTransform;

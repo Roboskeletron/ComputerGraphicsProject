@@ -1,4 +1,4 @@
-package com.cgp.graphics.primitives.rasterization;
+package com.cgp.graphics.primitives.rasterization.matrix;
 
 public final class ScreenMatrix {
     private final ModelMatrix modelMatrix;
