@@ -19,4 +19,12 @@ public final class ViewMatrix {
 
         return new ViewMatrix(target, viewMatrix);
     }
+
+    public GameObject getGameObject() {
+        return gameObject;
+    }
+
+    public Matrix4 getViewMatrix() {
+        return viewMatrix;
+    }
 }
