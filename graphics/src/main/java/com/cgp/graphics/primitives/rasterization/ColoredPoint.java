@@ -1,4 +1,4 @@
-package com.cgp.graphics.primitives;
+package com.cgp.graphics.primitives.rasterization;
 
 import com.cgp.math.vector.Vector3F;
 import javafx.scene.paint.Color;

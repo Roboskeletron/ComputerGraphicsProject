@@ -1,7 +1,8 @@
-package com.cgp.graphics.components;
+package com.cgp.graphics.entities;
 
-import com.cgp.graphics.primitives.Material;
-import com.cgp.graphics.primitives.Transform;
+import com.cgp.graphics.components.Mesh;
+import com.cgp.graphics.components.material.Material;
+import com.cgp.graphics.components.transform.Transform;
 
 public class GameObject {
     private Transform transform;
@@ -12,6 +13,10 @@ public class GameObject {
         this.transform = transform;
         this.mesh = mesh;
         this.material = material;
+    }
+
+    public boolean isDrawable(){
+        return transform != null && mesh != null && material != null;
     }
 
     public Material getMaterial() {

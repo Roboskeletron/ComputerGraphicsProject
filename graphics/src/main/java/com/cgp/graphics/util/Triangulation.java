@@ -1,6 +1,6 @@
 package com.cgp.graphics.util;
 
-import com.cgp.graphics.primitives.Polygon;
+import com.cgp.graphics.primitives.mesh.Polygon;
 
 import java.util.ArrayList;
 

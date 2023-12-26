@@ -2,7 +2,7 @@ plugins {
   id 'java'
   id 'application'
   id 'org.javamodularity.moduleplugin' version '1.8.12'
-  id 'org.openjfx.javafxplugin' version '0.0.13'
+  id 'org.openjfx.javafxplugin' version '0.1.0'
   id 'org.beryx.jlink' version '2.25.0'
 }
 
@@ -17,26 +17,26 @@ ext {
   junitVersion = '5.9.2'
 }
 
-sourceCompatibility = '17'
-targetCompatibility = '17'
+sourceCompatibility = '19'
+targetCompatibility = '19'
 
 tasks.withType(JavaCompile) {
   options.encoding = 'UTF-8'
 }
 
 application {
-  mainModule = 'com.cgp.ui'
   mainClass = 'com.cgp.ui.HelloApplication'
 }
 
 javafx {
-  version = '17.0.6'
+  version = '17.0.8'
   modules = ['javafx.controls', 'javafx.fxml']
 }
 
 dependencies {
   implementation('org.controlsfx:controlsfx:11.1.2')
-
+  implementation project(":math")
+  implementation project(":graphics")
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }

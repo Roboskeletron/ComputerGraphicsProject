@@ -1,5 +1,7 @@
 package com.cgp.math.vector;
 
+import com.cgp.math.util.MathUtil;
+
 public class Vector4F {
     private float x;
     private float y;
@@ -75,5 +77,24 @@ public class Vector4F {
     public Vector4F normalize() {
         float magnitude = this.magnitude();
         return new Vector4F(this.x / magnitude, this.y / magnitude, this.z / magnitude, this.w / magnitude);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Vector4F vector){
+            return MathUtil.compareFloat(x, vector.x) == 0 && MathUtil.compareFloat(y, vector.y) == 0;
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = (int) (19 * hash + x);
+        hash = (int) (19 * hash + y);
+        hash = (int) (19 * hash + z);
+        hash = (int) (19 * hash + w);
+        return hash;
     }
 }

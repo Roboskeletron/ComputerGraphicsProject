@@ -1,13 +1,13 @@
-package com.cgp.graphics.primitives;
+package com.cgp.graphics.primitives.mesh;
 
-import com.cgp.math.vector.Vector3F;
-
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
 
 public class Polygon {
-    private final Vector3F[] vertices;
+    private final Vertex[] vertices;
 
-    protected Polygon(Vector3F[] vertices) {
+    protected Polygon(Vertex[] vertices) {
         if (vertices.length < 3){
             throw new IllegalArgumentException("Polygon must consist of at least 3 vertices");
         }
@@ -15,7 +15,7 @@ public class Polygon {
         this.vertices = vertices;
     }
 
-    public Vector3F getVertex(int index){
+    public Vertex getVertex(int index){
         return vertices[index];
     }
 
@@ -23,47 +23,62 @@ public class Polygon {
         return vertices.length;
     }
 
+    public Vertex[] getVertices() {
+        return vertices;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Polygon polygon){
 
-            return Arrays.equals(vertices, polygon.vertices);
+            return polygon.hashCode() == this.hashCode();
         }
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 3;
+
+        for (var vertex : vertices){
+            hash += vertex.hashCode();
+        }
+
+        return hash;
+    }
+
     public static class Builder {
-        private final LinkedList<Vector3F> vertices = new LinkedList<>();
+        private final LinkedList<Vertex> vertices = new LinkedList<>();
 
         public Builder(){
 
         }
 
-        public Builder(Collection<Vector3F> vertices){
+        public Builder(Collection<Vertex> vertices){
             this.vertices.addAll(vertices);
         }
 
-        public Builder(Vector3F... vertices){
+        public Builder(Vertex... vertices){
             this.vertices.addAll(Arrays.stream(vertices).toList());
         }
 
-        public Builder withVertex(Vector3F vertex){
+        public Builder withVertex(Vertex vertex){
             vertices.add(vertex);
             return this;
         }
 
-        public Builder withVertices(Collection<Vector3F> vertices){
+        public Builder withVertices(Collection<Vertex> vertices){
             this.vertices.addAll(vertices);
             return this;
         }
 
-        public Builder withVertices(Vector3F... vertices){
+        public Builder withVertices(Vertex... vertices){
             this.vertices.addAll(Arrays.stream(vertices).toList());
             return this;
         }
 
         public Polygon build(){
-            return new Polygon(vertices.toArray(new Vector3F[0]));
+            return new Polygon(vertices.toArray(new Vertex[0]));
         }
 
         public int getVertexCount(){

@@ -1,6 +1,6 @@
 package com.cgp.graphics.util;
 
-import com.cgp.graphics.primitives.ColoredPoint;
+import com.cgp.graphics.primitives.rasterization.ColoredPoint;
 import com.cgp.math.vector.Vector3F;
 import javafx.scene.paint.Color;
 
