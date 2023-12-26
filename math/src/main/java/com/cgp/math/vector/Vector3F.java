@@ -86,10 +86,18 @@ public class Vector3F {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Vector3F vector3F){
-            return MathUtil.compareFloat(x, vector3F.x) == 0 && MathUtil.compareFloat(y, vector3F.y) == 0 && MathUtil.compareFloat(z, vector3F.z) == 0;
+        if (obj instanceof Vector3F vector){
+            return MathUtil.compareFloat(x, vector.x) == 0 && MathUtil.compareFloat(y, vector.y) == 0 && MathUtil.compareFloat(z, vector.z) == 0;
         }
 
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = (int) (19 * hash + x);
+        hash = (int) (19 * hash + y);
+        return hash;
     }
 }

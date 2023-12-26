@@ -8,7 +8,24 @@ public class AffineTransform {
     private Matrix4 scaleMatrix;
 
     public AffineTransform() {
-
+        translateMatrix = new Matrix4(new float[][]{
+                {1, 0, 0, 0},
+                {0, 1, 0, 0},
+                {0, 0, 1, 0},
+                {0, 0, 0, 1}
+        });
+        rotateMatrix = new Matrix4(new float[][]{
+                {1, 0, 0, 0},
+                {0, 1, 0, 0},
+                {0, 0, 1, 0},
+                {0, 0, 0, 1}
+        });
+        scaleMatrix = new Matrix4(new float[][]{
+                {1, 0, 0, 0},
+                {0, 1, 0, 0},
+                {0, 0, 1, 0},
+                {0, 0, 0, 1}
+        });
     }
 
     public Matrix4 getTransformationMatrix() {
@@ -42,29 +59,6 @@ public class AffineTransform {
                 {-sinY, sinX * cosY, cosX * cosY, 0},
                 {0, 0, 0, 1}
         });
-
-//        var rotateX = new Matrix4(new float[][]{
-//                {1, 0, 0, 0},
-//                {0, cosX, sinX, 0},
-//                {0, -sinX, cosX, 0},
-//                {0, 0, 0, 1}
-//        });
-//
-//        var rotateY = new Matrix4(new float[][]{
-//                {cosY, 0, sinY, 0},
-//                {0, 1, 0, 0},
-//                {-sinY, 0, cosY, 0},
-//                {0, 0, 0, 1}
-//        });
-//
-//        var rotateZ = new Matrix4(new float[][]{
-//                {cosZ, sinY, 0, 0},
-//                {-sinZ, cosZ, 0, 0},
-//                {0, 0, 1, 0},
-//                {0, 0, 0, 1}
-//        });
-//
-//        rotateMatrix = rotateX.multiply(rotateY).multiply(rotateZ);
     }
 
     public void translate(float translateX, float translateY, float translateZ) {
