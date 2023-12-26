@@ -23,6 +23,11 @@ public class BasicTexture  implements Texture {
 
     @Override
     public Color getColor(int width, int height) {
-        return image.getPixelReader().getColor(width, height);
+        var x = Math.max(0, width);
+        x = Math.min(getWidth() - 1, x);
+        var y = Math.max(0, height);
+        y = Math.min(getHeight() - 1, y);
+
+        return image.getPixelReader().getColor(x, y);
     }
 }

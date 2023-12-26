@@ -25,14 +25,13 @@ public class BasicMaterial extends Material {
         var texturePoint = calculateNormalizedTexturePoint(point);
 
         scaleTexturePoint(texturePoint);
-        texturePoint.setZ(point.getZ());
 
         var x = Math.round(texturePoint.getX());
         var y = Math.round(texturePoint.getY());
 
         var color = texture.getColor(x, y);
 
-        return new ColoredPoint(texturePoint, color);
+        return new ColoredPoint(point, color);
     }
 
     protected Vector3F calculateNormalizedTexturePoint(BarycentricVector vector) {
