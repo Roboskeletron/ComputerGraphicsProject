@@ -16,7 +16,7 @@ public abstract class PolygonFactory {
         return new Polygon.Builder()
                 .withVertices(Arrays.stream(polygon.getVertices()).parallel()
                         .map(vertex -> NormalizedScreenPoint.create(vertex, screenMatrix))
-                        .collect(Collectors.toSet())
+                        .collect(Collectors.toList())
                 )
                 .build();
     }
@@ -27,7 +27,7 @@ public abstract class PolygonFactory {
         return new Polygon.Builder()
                 .withVertices(Arrays.stream(polygon.getVertices()).parallel()
                         .map(vertex -> ScreenPoint.create((NormalizedScreenPoint) vertex, width, height))
-                        .collect(Collectors.toSet())
+                        .collect(Collectors.toList())
                 )
                 .build();
     }
