@@ -25,7 +25,7 @@ public class BasicPipeline implements Pipeline {
     @Override
     public void drawScene(GraphicsContext graphicsContext) {
         var canvas = graphicsContext.getCanvas();
-        graphicsContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+       cleanScreen(graphicsContext);
 
         rasterization(graphicsContext, (int) canvas.getWidth(), (int) canvas.getHeight());
     }
@@ -52,6 +52,11 @@ public class BasicPipeline implements Pipeline {
         int x = (int) point.getX();
         int y = (int) point.getY();
         graphicsContext.getPixelWriter().setColor(x, y, Color.RED);
+    }
+
+    protected void cleanScreen(GraphicsContext graphicsContext){
+        var canvas = graphicsContext.getCanvas();
+        graphicsContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
     public Scene getScene() {
