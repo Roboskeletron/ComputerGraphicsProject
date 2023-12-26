@@ -4,6 +4,7 @@ import com.cgp.graphics.entities.GameObject;
 import com.cgp.graphics.primitives.mesh.Polygon;
 import com.cgp.graphics.primitives.rasterization.BarycentricVector;
 import com.cgp.graphics.primitives.rasterization.ColoredPoint;
+import com.cgp.graphics.primitives.rasterization.NormalizedScreenPoint;
 import com.cgp.graphics.primitives.rasterization.matrix.ClipMatrix;
 import com.cgp.graphics.primitives.rasterization.matrix.ModelMatrix;
 import com.cgp.graphics.primitives.rasterization.matrix.ScreenMatrix;
@@ -11,7 +12,9 @@ import com.cgp.graphics.primitives.rasterization.matrix.ViewMatrix;
 import com.cgp.graphics.util.BarycentricCoordinates;
 import com.cgp.graphics.util.BarycentricCoordinatesUtil;
 import com.cgp.graphics.util.PolygonFactory;
+import com.cgp.math.vector.Vector3F;
 
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class DrawableObject implements Drawable, Cloneable {
@@ -37,7 +40,8 @@ public class DrawableObject implements Drawable, Cloneable {
 
     private Stream<Polygon> calculateNormalizedScreenPoints(){
         return gameObject.getMesh().getTriangulatedPolygons().parallelStream()
-                .map(polygon -> PolygonFactory.createNormalizedPolygon(polygon, screenMatrix));
+                .map(polygon -> PolygonFactory.createNormalizedPolygon(polygon, screenMatrix))
+                .filter(DrawableObject::polygonFilter);
     }
 
     private Stream<Polygon> calculateScreenPoints(int width, int height){
@@ -70,5 +74,20 @@ public class DrawableObject implements Drawable, Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
+    }
+
+    private static boolean polygonFilter(Polygon polygon){
+        return Arrays.stream(polygon.getVertices()).parallel()
+                .map(vertex -> (NormalizedScreenPoint) vertex)
+                .map(NormalizedScreenPoint::getNormalizedScreenPoint)
+                .allMatch(DrawableObject::pointFilter);
+    }
+
+    private static boolean pointFilter(Vector3F point){
+        var x = Math.abs(point.getX());
+        var y = Math.abs(point.getY());
+        var z = Math.abs(point.getZ());
+
+        return x <=1 && y <= 1 && z <= 1;
     }
 }
