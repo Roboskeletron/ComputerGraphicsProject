@@ -1,8 +1,9 @@
 package com.cgp.graphics.components.material;
 
-import com.cgp.graphics.primitives.BarycentricVector;
-import com.cgp.graphics.primitives.ColoredPoint;
-import com.cgp.graphics.primitives.Polygon;
+import com.cgp.graphics.primitives.rasterization.BarycentricVector;
+import com.cgp.graphics.primitives.rasterization.ColoredPoint;
+import com.cgp.graphics.primitives.mesh.Polygon;
+import com.cgp.graphics.util.PolygonFactory;
 import com.cgp.graphics.util.Triangulation;
 import com.cgp.math.vector.Vector3F;
 
@@ -24,6 +25,7 @@ public class BasicMaterial extends Material {
         var texturePoint = calculateNormalizedTexturePoint(point);
 
         scaleTexturePoint(texturePoint);
+        texturePoint.setZ(point.getZ());
 
         var x = Math.round(texturePoint.getX());
         var y = Math.round(texturePoint.getY());
@@ -34,13 +36,7 @@ public class BasicMaterial extends Material {
     }
 
     protected Vector3F calculateNormalizedTexturePoint(BarycentricVector vector) {
-        var barycentricCoordinates = vector.getBarycentricCoordinates();
-
-        var polygon = new Polygon.Builder()
-                .withVertex(barycentricCoordinates.getA())
-                .withVertex(barycentricCoordinates.getB())
-                .withVertex(barycentricCoordinates.getC())
-                .build();
+        var polygon = PolygonFactory.fromBarycentricCoordinates(vector.getBarycentricCoordinates());
 
         var texturePolygon = polygonTexturePolygonMap.get(polygon);
 

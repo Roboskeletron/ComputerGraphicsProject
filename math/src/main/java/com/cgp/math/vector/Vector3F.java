@@ -98,6 +98,7 @@ public class Vector3F {
         int hash = 3;
         hash = (int) (19 * hash + x);
         hash = (int) (19 * hash + y);
+        hash = (int) (19 * hash + z);
         return hash;
     }
 }

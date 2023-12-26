@@ -3,7 +3,7 @@ package com.cgp.graphics.pipeline;
 import com.cgp.graphics.entities.GameObject;
 import com.cgp.graphics.entities.Scene;
 import com.cgp.graphics.entities.Camera;
-import com.cgp.graphics.primitives.Polygon;
+import com.cgp.graphics.primitives.mesh.Polygon;
 import com.cgp.math.vector.Vector3F;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -16,11 +16,6 @@ public class MeshPipeline  extends  BasicPipeline {
         super(scene);
     }
 
-    @Override
-    protected void rasterization(Map<Vector3F, Vector3F> points, GraphicsContext graphicsContext) {
-        super.rasterization(points, graphicsContext);
-        drawMesh(points, graphicsContext);
-    }
 
     private void drawMesh(Map<Vector3F, Vector3F> points, GraphicsContext graphicsContext){
         super.getScene().getObjectCollection().stream()

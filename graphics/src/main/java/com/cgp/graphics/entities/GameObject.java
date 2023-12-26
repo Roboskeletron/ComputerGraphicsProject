@@ -15,6 +15,10 @@ public class GameObject {
         this.material = material;
     }
 
+    public boolean isDrawable(){
+        return transform != null && mesh != null && material != null;
+    }
+
     public Material getMaterial() {
         return material;
     }

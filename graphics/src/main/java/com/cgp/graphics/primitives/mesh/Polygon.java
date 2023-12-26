@@ -31,7 +31,7 @@ public class Polygon {
     public boolean equals(Object obj) {
         if (obj instanceof Polygon polygon){
 
-            return Arrays.equals(vertices, polygon.vertices);
+            return polygon.hashCode() == this.hashCode();
         }
         return false;
     }
@@ -41,7 +41,7 @@ public class Polygon {
         int hash = 3;
 
         for (var vertex : vertices){
-            hash = hash * 19 + vertex.hashCode();
+            hash += vertex.hashCode();
         }
 
         return hash;

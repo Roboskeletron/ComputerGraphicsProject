@@ -1,5 +1,6 @@
 package com.cgp.graphics.primitives;
 
+import com.cgp.graphics.primitives.mesh.Polygon;
 import com.cgp.math.vector.Vector3F;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;

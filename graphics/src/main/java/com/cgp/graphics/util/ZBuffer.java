@@ -7,12 +7,13 @@ import com.cgp.math.vector.Vector3F;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 public class ZBuffer {
-    public static <Vector extends Vector3F> Collection<Vector> filterPoints(Collection<Vector> points) {
+    public static <Vector extends Vector3F> Collection<Vector> filterPoints(Stream<Vector> points) {
         ConcurrentHashMap<Vector2F, Vector> buffer = new ConcurrentHashMap<>();
 
-        points.parallelStream().forEach(point -> ZBuffer.setValue(buffer, point));
+        points.forEach(point -> ZBuffer.setValue(buffer, point));
 
         return buffer.values();
     }

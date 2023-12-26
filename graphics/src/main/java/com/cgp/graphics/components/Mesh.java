@@ -1,7 +1,6 @@
 package com.cgp.graphics.components;
 
-import com.cgp.graphics.primitives.Polygon;
-import com.cgp.graphics.util.BarycentricCoordinates;
+import com.cgp.graphics.primitives.mesh.Polygon;
 import com.cgp.graphics.util.Normal;
 import com.cgp.graphics.util.Triangulation;
 import com.cgp.math.vector.Vector3F;
@@ -17,7 +16,6 @@ public class Mesh {
     protected final ConcurrentHashMap<Vector3F, List<Polygon>> vertexPolygonMap = new ConcurrentHashMap<>();
     protected final ConcurrentHashMap<Polygon, Vector3F> polygonNormalMap = new ConcurrentHashMap<>();
     protected ArrayList<Polygon> triangulatedPolygons = new ArrayList<>();
-    protected Map<Vector3F, Vector4F> vertices4;
 
     public Mesh(List<Polygon> polygons) {
         this.polygons = polygons;
@@ -37,26 +35,19 @@ public class Mesh {
                 polygons.stream().forEachOrdered(this::mapVerticesToPolygons)
         );
 
-        polygonNormalMap.putAll(triangulatedPolygons.stream().collect(Collectors.toConcurrentMap(
-                                polygon -> polygon,
-                                Normal::getPolygonNormal
-                        )
-                )
-        );
-
-        vertexNormalMap.putAll(vertexPolygonMap.keySet().stream().collect(Collectors.toConcurrentMap(
-                                vertex -> vertex,
-                                vertex -> Normal.getVertexNormal(vertex, vertexPolygonMap, polygonNormalMap)
-                        )
-                )
-        );
-
-        vertices4 = vertexNormalMap.keySet().stream()
-                .collect(Collectors.toConcurrentMap(
-                                vertex -> vertex,
-                                vertex -> new Vector4F(vertex.getX(), vertex.getY(), vertex.getZ(), 1)
-                        )
-                );
+//        polygonNormalMap.putAll(triangulatedPolygons.stream().collect(Collectors.toConcurrentMap(
+//                                polygon -> polygon,
+//                                Normal::getPolygonNormal
+//                        )
+//                )
+//        );
+//
+//        vertexNormalMap.putAll(vertexPolygonMap.keySet().stream().collect(Collectors.toConcurrentMap(
+//                                vertex -> vertex,
+//                                vertex -> Normal.getVertexNormal(vertex, vertexPolygonMap, polygonNormalMap)
+//                        )
+//                )
+//        );
     }
 
     private void mapVerticesToPolygons(Polygon polygon) {
@@ -94,9 +85,5 @@ public class Mesh {
 
     public ArrayList<Polygon> getTriangulatedPolygons() {
         return triangulatedPolygons;
-    }
-
-    public Map<Vector3F, Vector4F> getVertices4() {
-        return vertices4;
     }
 }

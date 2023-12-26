@@ -13,4 +13,18 @@ public class Vertex extends Vector3F {
     public Vector4F getVertex4F() {
         return vertex4F;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Vertex vertex){
+            return vertex.hashCode() == this.hashCode();
+        }
+
+        return false;
+    }
 }

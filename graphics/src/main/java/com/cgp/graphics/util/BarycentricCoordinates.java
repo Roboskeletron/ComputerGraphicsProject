@@ -1,11 +1,10 @@
 package com.cgp.graphics.util;
 
-import com.cgp.graphics.primitives.BarycentricVector;
-import com.cgp.graphics.primitives.Polygon;
+import com.cgp.graphics.primitives.mesh.Polygon;
+import com.cgp.graphics.primitives.rasterization.BarycentricVector;
+import com.cgp.graphics.primitives.rasterization.ScreenPoint;
 import com.cgp.math.matrix.Matrix3;
 import com.cgp.math.vector.Vector3F;
-
-import java.util.Map;
 
 public class BarycentricCoordinates {
     private final Vector3F a;
@@ -13,11 +12,14 @@ public class BarycentricCoordinates {
     private final Vector3F c;
     private final Matrix3 matrix;
 
-    public BarycentricCoordinates(Vector3F a, Vector3F b, Vector3F c) {
+    private BarycentricCoordinates(Vector3F a, Vector3F b, Vector3F c, Matrix3 matrix) {
         this.a = a;
         this.b = b;
         this.c = c;
+        this.matrix = matrix;
+    }
 
+    private static Matrix3 computeMatrix(Vector3F a, Vector3F b, Vector3F c) {
         Matrix3 matrix = null;
         try {
             matrix = new Matrix3(new float[][]{
@@ -26,29 +28,31 @@ public class BarycentricCoordinates {
                     {1, 1, 1}
             })
                     .inverse();
+        } catch (ArithmeticException ignored) {
         }
-        catch (ArithmeticException ignored){
-        }
-        finally {
-            this.matrix = matrix;
-        }
+
+        return matrix;
     }
 
-    public static BarycentricCoordinates fromPolygon(Polygon polygon, Map<? extends Vector3F, ? extends Vector3F> vertexScreenPointMap){
-        if (polygon.getVertexCount() != 3){
+    public static BarycentricCoordinates fromPolygon(Polygon polygon) {
+        if (polygon.getVertexCount() != 3) {
             throw new IllegalArgumentException("Polygon must be triangulated");
         }
 
-        var a = vertexScreenPointMap.get(polygon.getVertex(0));
-        var b = vertexScreenPointMap.get(polygon.getVertex(1));
-        var c = vertexScreenPointMap.get(polygon.getVertex(2));
+        if (polygon.getVertex(0) instanceof ScreenPoint a &&
+                polygon.getVertex(1) instanceof ScreenPoint b &&
+                polygon.getVertex(2) instanceof ScreenPoint c) {
+            var matrix = computeMatrix(a.getPoint(), b.getPoint(), c.getPoint());
 
-        return new BarycentricCoordinates(a, b, c);
+            return new BarycentricCoordinates(a, b, c, matrix);
+        } else {
+            throw new IllegalArgumentException("Vertices should be instances of ScreenPoint");
+        }
     }
 
-    public Vector3F getBarycentricVector(Vector3F point) {
-        if (matrix == null){
-            return new Vector3F(-1, -1,  -1);
+    public Vector3F getLambdaVector(Vector3F point) {
+        if (matrix == null) {
+            return new Vector3F(-1, -1, -1);
         }
 
         return matrix.multiplyVector3(
@@ -60,20 +64,7 @@ public class BarycentricCoordinates {
         );
     }
 
-    public void setZPixel(Vector3F point) {
-        var coordinates = getBarycentricVector(point);
-
-        var z = coordinates.dotProduct(new Vector3F(
-                        a.getZ(),
-                        b.getZ(),
-                        c.getZ()
-                )
-        );
-
-        point.setZ(z);
-    }
-
-    public static boolean checkLambdaVector(BarycentricVector vector){
+    public static boolean checkLambdaVector(BarycentricVector vector) {
         return vector.getLambdaVector().getX() >= 0 && vector.getLambdaVector().getY() >= 0 && vector.getLambdaVector().getZ() >= 0;
     }
 
