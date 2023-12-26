@@ -51,7 +51,7 @@ public class BasicMaterial extends Material {
 
     protected void scaleTexturePoint(Vector3F point) {
         var x = texture.getWidth() * point.getX();
-        var y = texture.getHeight() * point.getY();
+        var y = texture.getHeight() * (1 - point.getY());
 
         point.setX(x);
         point.setY(y);
