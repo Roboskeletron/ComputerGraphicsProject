@@ -8,7 +8,6 @@ import com.cgp.graphics.primitives.rasterization.ColoredPoint;
 import com.cgp.graphics.primitives.rasterization.matrix.ClipMatrix;
 import com.cgp.graphics.util.ZBuffer;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
@@ -48,10 +47,10 @@ public class BasicPipeline implements Pipeline {
                 .forEach(point -> drawPoint(point, graphicsContext));
     }
 
-    protected void drawPoint(ColoredPoint point, GraphicsContext graphicsContext){
+    protected void drawPoint(ColoredPoint point, GraphicsContext graphicsContext) {
         int x = (int) point.getX();
         int y = (int) point.getY();
-        graphicsContext.getPixelWriter().setColor(x, y, Color.RED);
+        graphicsContext.getPixelWriter().setColor(x, y, point.getColor());
     }
 
     protected void cleanScreen(GraphicsContext graphicsContext){
