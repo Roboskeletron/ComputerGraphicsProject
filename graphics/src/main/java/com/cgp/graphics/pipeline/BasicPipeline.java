@@ -12,7 +12,7 @@ import javafx.scene.canvas.GraphicsContext;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
-public class BasicPipeline implements Pipeline {
+class BasicPipeline implements Pipeline {
     private Scene scene;
     protected ConcurrentLinkedQueue<Drawable> drawables;
     protected ClipMatrix clipMatrix;
@@ -24,7 +24,7 @@ public class BasicPipeline implements Pipeline {
     @Override
     public void drawScene(GraphicsContext graphicsContext) {
         var canvas = graphicsContext.getCanvas();
-       cleanScreen(graphicsContext);
+        cleanScreen(graphicsContext);
 
         rasterization(graphicsContext, (int) canvas.getWidth(), (int) canvas.getHeight());
     }
@@ -55,7 +55,7 @@ public class BasicPipeline implements Pipeline {
 
     protected void cleanScreen(GraphicsContext graphicsContext){
         var canvas = graphicsContext.getCanvas();
-        graphicsContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        graphicsContext.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
     public Scene getScene() {
