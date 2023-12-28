@@ -79,6 +79,9 @@ public class HelloController {
             case DOWN -> rotationVector.setX(-1);
             case RIGHT -> rotationVector.setY(1);
             case LEFT -> rotationVector.setY(-1);
+
+            case T -> textureModeChange();
+            case M -> meshModeChange();
         }
 
         translationVector = translationVector.scalarMultiply(velocity);
@@ -92,6 +95,20 @@ public class HelloController {
         transform.setRotation(rotation);
 
         pipeline.run();
+    }
+
+    private void textureModeChange(){
+        var gp = (GraphicsPipeline) pipeline;
+        var mode = gp.getPipelineMode("Texture mode");
+
+        mode.setEnabled(!mode.isEnabled());
+    }
+
+    private void meshModeChange(){
+        var gp = (GraphicsPipeline) pipeline;
+        var mode = gp.getPipelineMode("Mesh mode");
+
+        mode.setEnabled(!mode.isEnabled());
     }
 
     private Vector3F calculateTranslationVector(Vector3F vector, Vector3F direction){

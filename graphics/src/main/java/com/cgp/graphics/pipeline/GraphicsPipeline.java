@@ -1,16 +1,18 @@
 package com.cgp.graphics.pipeline;
 
 import com.cgp.graphics.entities.Scene;
+import com.cgp.graphics.events.Subscriber;
 import com.cgp.graphics.pipeline.mode.MeshMode;
 import com.cgp.graphics.pipeline.mode.PipelineMode;
 import com.cgp.graphics.pipeline.mode.TextureMode;
+import com.cgp.graphics.primitives.pipeline.PipelineModeStatusEvent;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 import java.util.HashMap;
 import java.util.Iterator;
 
-public final class GraphicsPipeline implements Pipeline {
+public final class GraphicsPipeline implements Pipeline, Subscriber<PipelineModeStatusEvent> {
     private final Pipeline pipeline;
     private Color backgroundColor = Color.DARKGREY;
     private final HashMap<String, PipelineMode> pipelineModes = new HashMap<>();
@@ -49,6 +51,7 @@ public final class GraphicsPipeline implements Pipeline {
 
         if (result == null){
             applyMode(pipelineMode);
+            pipelineMode.getEventGenerator().subscribe(this);
         }
     }
 
@@ -74,5 +77,16 @@ public final class GraphicsPipeline implements Pipeline {
     private void applyMode(PipelineMode mode){
         var gameObjects = ((BasicPipeline) pipeline).getScene().getObjectCollection().parallelStream();
         mode.applyMode(gameObjects);
+    }
+
+    @Override
+    public void process(PipelineModeStatusEvent event) {
+        var mode = (PipelineMode) event.getSender();
+
+        applyMode(mode);
+
+        if (event.isEndSubscription()){
+            mode.getEventGenerator().unsubscribe(this);
+        }
     }
 }
