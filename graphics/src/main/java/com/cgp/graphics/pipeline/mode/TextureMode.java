@@ -1,4 +1,4 @@
-package com.cgp.graphics.pipeline;
+package com.cgp.graphics.pipeline.mode;
 
 import com.cgp.graphics.components.material.BasicMaterial;
 import com.cgp.graphics.entities.GameObject;
@@ -6,7 +6,7 @@ import com.cgp.graphics.entities.GameObject;
 import java.util.stream.Stream;
 
 public class TextureMode extends PipelineMode {
-    protected TextureMode() {
+    public TextureMode() {
         super("Texture mode");
     }
 

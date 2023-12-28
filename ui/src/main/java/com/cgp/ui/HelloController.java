@@ -2,7 +2,7 @@ package com.cgp.ui;
 
 import com.cgp.graphics.components.transform.BasicTransform;
 import com.cgp.graphics.entities.Camera;
-import com.cgp.graphics.pipeline.BasicPipeline;
+import com.cgp.graphics.pipeline.GraphicsPipeline;
 import com.cgp.graphics.pipeline.Pipeline;
 import com.cgp.math.vector.Vector3F;
 import javafx.animation.AnimationTimer;
@@ -48,7 +48,7 @@ public class HelloController {
 
         var scene = CubeScene.createScene(camera);
 
-        pipeline = new BasicPipeline(scene);
+        pipeline = new GraphicsPipeline(scene);
 
         timer = new AnimationTimer() {
             @Override

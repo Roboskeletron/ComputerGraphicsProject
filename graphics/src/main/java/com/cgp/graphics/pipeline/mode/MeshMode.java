@@ -1,4 +1,4 @@
-package com.cgp.graphics.pipeline;
+package com.cgp.graphics.pipeline.mode;
 
 import com.cgp.graphics.components.material.BasicMaterial;
 import com.cgp.graphics.components.material.MeshMaterial;
