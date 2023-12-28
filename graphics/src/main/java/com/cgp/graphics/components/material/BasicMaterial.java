@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class BasicMaterial extends Material {
-    private ConcurrentHashMap<Polygon, Polygon> polygonTexturePolygonMap;
+    protected ConcurrentHashMap<Polygon, Polygon> polygonTexturePolygonMap;
 
     @Override
     public void bakeMaterial(Map<Polygon, Polygon> polygonTexturePolygonMap) {

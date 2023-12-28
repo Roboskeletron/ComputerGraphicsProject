@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 
 public class BasicPipeline implements Pipeline {
     private Scene scene;
-    private ConcurrentLinkedQueue<Drawable> drawables;
-    private ClipMatrix clipMatrix;
+    protected ConcurrentLinkedQueue<Drawable> drawables;
+    protected ClipMatrix clipMatrix;
 
     public BasicPipeline(Scene scene) {
         setScene(scene);

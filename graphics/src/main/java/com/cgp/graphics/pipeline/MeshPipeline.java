@@ -1,41 +1,33 @@
 package com.cgp.graphics.pipeline;
 
+import com.cgp.graphics.components.material.BasicMaterial;
+import com.cgp.graphics.components.material.MeshMaterial;
 import com.cgp.graphics.entities.GameObject;
 import com.cgp.graphics.entities.Scene;
-import com.cgp.graphics.entities.Camera;
-import com.cgp.graphics.primitives.mesh.Polygon;
-import com.cgp.math.vector.Vector3F;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
+import com.cgp.graphics.primitives.pipeline.DrawableObject;
+import com.cgp.graphics.primitives.rasterization.matrix.ClipMatrix;
 
-import java.util.Arrays;
-import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
-public class MeshPipeline  extends  BasicPipeline {
+public class MeshPipeline  extends  TexturePipeline {
     public MeshPipeline(Scene scene) {
         super(scene);
     }
 
+    @Override
+    public void run() {
+        clipMatrix = ClipMatrix.create(getScene().getCurrentCamera());
 
-    private void drawMesh(Map<Vector3F, Vector3F> points, GraphicsContext graphicsContext){
-        super.getScene().getObjectCollection().stream()
-                .filter(gameObject -> !(gameObject instanceof Camera))
-                .map(GameObject::getMesh)
-                .flatMap(mesh -> mesh.getTriangulatedPolygons().stream())
-                .filter(polygon -> Arrays.stream(polygon.getVertices()).allMatch(points::containsKey))
-                .forEach(polygon -> drawPolygon(polygon, points, graphicsContext));
-    }
-
-    private void drawPolygon(Polygon polygon, Map<Vector3F, Vector3F> points, GraphicsContext graphicsContext){
-        graphicsContext.setStroke(Color.GREEN);
-        var a = points.get(polygon.getVertex(0));
-        var b = points.get(polygon.getVertex(1));
-
-        graphicsContext.strokeLine(a.getX(), a.getY(), b.getX(), b.getY());
-
-        a = points.get(polygon.getVertex(1));
-        b = points.get(polygon.getVertex(2));
-
-        graphicsContext.strokeLine(a.getX(), a.getY(), b.getX(), b.getY());
+        drawables = getScene().getObjectCollection().parallelStream()
+                .filter(GameObject::isDrawable)
+                .map(GameObject::clone)
+                .peek(gameObject -> gameObject
+                        .setMaterial(MeshMaterial.fromBasicMaterial((BasicMaterial) gameObject.getMaterial())
+                        )
+                )
+                .map(gameObject -> DrawableObject.create(gameObject, clipMatrix))
+                .collect(Collectors.toCollection(ConcurrentLinkedQueue::new));
     }
 }
