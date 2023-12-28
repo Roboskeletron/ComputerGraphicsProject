@@ -25,8 +25,7 @@ public class CubeScene {
         Image textureImage = new Image(file.toURI().toString());
         BasicTexture texture = new BasicTexture(textureImage);
 
-        BasicMaterial material = new BasicMaterial();
-        material.setTexture(texture);
+        BasicMaterial material = new BasicMaterial(texture);
 
         ArrayList<GameObject> objects = new ArrayList<>();
 

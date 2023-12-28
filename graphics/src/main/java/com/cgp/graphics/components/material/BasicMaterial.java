@@ -1,5 +1,6 @@
 package com.cgp.graphics.components.material;
 
+import com.cgp.graphics.components.texture.Texture;
 import com.cgp.graphics.primitives.rasterization.BarycentricVector;
 import com.cgp.graphics.primitives.rasterization.ColoredPoint;
 import com.cgp.graphics.primitives.mesh.Polygon;
@@ -15,6 +16,10 @@ import java.util.stream.IntStream;
 public class BasicMaterial extends Material {
     protected ConcurrentHashMap<Polygon, Polygon> polygonTexturePolygonMap;
 
+    public BasicMaterial(Texture texture) {
+        super(texture);
+    }
+
     @Override
     public void bakeMaterial(Map<Polygon, Polygon> polygonTexturePolygonMap) {
         this.polygonTexturePolygonMap = calculateTriangulatedMap(polygonTexturePolygonMap);
@@ -22,6 +27,10 @@ public class BasicMaterial extends Material {
 
     @Override
     public ColoredPoint getColoredPoint(BarycentricVector point) {
+        if (!isUseTexture()){
+            return new ColoredPoint(point, baseColor);
+        }
+
         var texturePoint = calculateNormalizedTexturePoint(point);
 
         scaleTexturePoint(texturePoint);

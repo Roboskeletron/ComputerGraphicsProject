@@ -1,5 +1,6 @@
 package com.cgp.graphics.components.material;
 
+import com.cgp.graphics.components.texture.Texture;
 import com.cgp.graphics.primitives.rasterization.BarycentricVector;
 import com.cgp.graphics.primitives.rasterization.ColoredPoint;
 import com.cgp.math.util.MathUtil;
@@ -7,16 +8,21 @@ import com.cgp.math.vector.Vector3F;
 import javafx.scene.paint.Color;
 
 public class MeshMaterial extends BasicMaterial {
-    public static Color meshColor = Color.GREEN;
-    private static float threshold = 0.01f;
+    private static Color meshColor = Color.GREEN;
+    private static final float meshLineThickness = 0.01f;
+    private boolean showMesh = true;
 
-    protected MeshMaterial(){
-
+    protected MeshMaterial(Texture texture){
+        super(texture);
     }
 
     @Override
     public ColoredPoint getColoredPoint(BarycentricVector point) {
         var coloredPoint = super.getColoredPoint(point);
+
+        if (showMesh){
+            return coloredPoint;
+        }
 
         if (isOnMeshLine(point.getLambdaVector())){
             coloredPoint.setColor(meshColor);
@@ -30,16 +36,35 @@ public class MeshMaterial extends BasicMaterial {
         var y = vector.getY();
         var z = vector.getZ();
 
-        return MathUtil.compareFloat(x, threshold) <= 0 ||
-                MathUtil.compareFloat(y, threshold) <= 0 ||
-                MathUtil.compareFloat(z, threshold) <= 0;
+        return MathUtil.compareFloat(x, meshLineThickness) <= 0 ||
+                MathUtil.compareFloat(y, meshLineThickness) <= 0 ||
+                MathUtil.compareFloat(z, meshLineThickness) <= 0;
     }
 
     public static MeshMaterial fromBasicMaterial(BasicMaterial basicMaterial){
-        var material = new MeshMaterial();
-        material.setTexture(basicMaterial.getTexture());
+        var material = new MeshMaterial(basicMaterial.getTexture());
         material.polygonTexturePolygonMap = basicMaterial.polygonTexturePolygonMap;
 
         return material;
+    }
+
+    public static Color getMeshColor() {
+        return meshColor;
+    }
+
+    public static void setMeshColor(Color meshColor) {
+        if (meshColor == null){
+            throw new NullPointerException("Mesh color cant be null");
+        }
+
+        MeshMaterial.meshColor = meshColor;
+    }
+
+    public boolean isShowMesh() {
+        return showMesh;
+    }
+
+    public void setShowMesh(boolean showMesh) {
+        this.showMesh = showMesh;
     }
 }
