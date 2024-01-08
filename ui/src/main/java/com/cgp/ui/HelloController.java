@@ -1,7 +1,11 @@
 package com.cgp.ui;
 
 import com.cgp.graphics.components.BasicTransform;
+import com.cgp.graphics.components.GameObject;
 import com.cgp.graphics.entities.Camera;
+import com.cgp.graphics.entities.Model3D;
+import com.cgp.graphics.objreader.ObjReader;
+import com.cgp.graphics.objwriter.ObjWriter;
 import com.cgp.graphics.pipeline.BasicPipeline;
 import com.cgp.graphics.pipeline.MeshPipeline;
 import com.cgp.graphics.pipeline.Pipeline;
@@ -12,6 +16,13 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class HelloController {
     @FXML
@@ -24,6 +35,8 @@ public class HelloController {
     private AnimationTimer timer;
     private float velocity = 0.5f;
     private Scene scene;
+
+    private Model3D mesh = null;
 
     public HelloController() {
         camera.setAspectRatio(1);
@@ -136,4 +149,44 @@ public class HelloController {
         this.scene = scene;
         this.scene.setOnKeyPressed(this::handleKeyEvent);
     }
+
+    @FXML
+    private void onOpenModelMenuItemClick() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
+        fileChooser.setTitle("Load Model");
+
+        File file = fileChooser.showOpenDialog((Stage) mainCanvas.getScene().getWindow());
+        if (file == null) {
+            return;
+        }
+
+        Path fileName = Path.of(file.getAbsolutePath());
+
+        try {
+            String fileContent = Files.readString(fileName);
+            mesh = (Model3D) ObjReader.read(fileContent);
+            // todo: обработка ошибок
+        } catch (IOException exception) {
+
+        }
+    }
+
+    @FXML
+    private void onSaveModelMenuItemClick() {
+        String file = "Model.obj";
+//        ObjWriter.writeModelToObjFile(file, model);
+    }
+
+    @FXML
+    private void onSaveNewModelMenuItemClick() {}
+
+    @FXML
+    private void onSelectXAxisMenuItemClick() {}
+
+    @FXML
+    private void onSelectYAxisMenuItemClick() {}
+
+    @FXML
+    private void onSelectZAxisMenuItemClick() {}
 }

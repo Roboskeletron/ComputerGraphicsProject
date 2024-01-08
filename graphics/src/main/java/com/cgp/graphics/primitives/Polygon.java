@@ -5,7 +5,18 @@ import com.cgp.math.vector.Vector3F;
 import java.util.*;
 
 public class Polygon {
-    private final Vector3F[] vertices;
+    private Vector3F[] vertices;
+
+    private ArrayList<Integer> vertexIndices;
+    private ArrayList<Integer> textureVertexIndices;
+    private ArrayList<Integer> normalIndices;
+
+
+    public Polygon() {
+        vertexIndices = new ArrayList<Integer>();
+        textureVertexIndices = new ArrayList<Integer>();
+        normalIndices = new ArrayList<Integer>();
+    }
 
     protected Polygon(Vector3F[] vertices) {
         if (vertices.length < 3){
@@ -14,6 +25,7 @@ public class Polygon {
 
         this.vertices = vertices;
     }
+
 
     public Vector3F getVertex(int index){
         return vertices[index];
@@ -34,6 +46,30 @@ public class Polygon {
             return Arrays.equals(vertices, polygon.vertices);
         }
         return false;
+    }
+
+    public void setVertexIndices(ArrayList<Integer> vertexIndices) {
+        this.vertexIndices = vertexIndices;
+    }
+
+    public void setTextureVertexIndices(ArrayList<Integer> textureVertexIndices) {
+        this.textureVertexIndices = textureVertexIndices;
+    }
+
+    public void setNormalIndices(ArrayList<Integer> normalIndices) {
+        this.normalIndices = normalIndices;
+    }
+
+    public ArrayList<Integer> getVertexIndices() {
+        return new ArrayList<>(vertexIndices);
+    }
+
+    public ArrayList<Integer> getTextureVertexIndices() {
+        return new ArrayList<>(textureVertexIndices);
+    }
+
+    public ArrayList<Integer> getNormalIndices() {
+        return new ArrayList<>(normalIndices);
     }
 
     public static class Builder {

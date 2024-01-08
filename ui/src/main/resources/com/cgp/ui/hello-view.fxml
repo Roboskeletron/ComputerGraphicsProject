@@ -1,9 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane fx:id="anchorPane" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.cgp.ui.HelloController">
-  <Canvas fx:id="mainCanvas"/>
+<?import javafx.scene.canvas.Canvas?>
+
+<AnchorPane fx:id="anchorPane" xmlns:fx="http://javafx.com/fxml" fx:controller="com.cgp.ui.HelloController">
+  <MenuBar>
+    <Menu mnemonicParsing="false" text="File">
+      <MenuItem mnemonicParsing="false" onAction="#onOpenModelMenuItemClick" text="Load model">
+        <accelerator>
+          <KeyCodeCombination alt="UP" control="DOWN" meta="UP" shift="UP" shortcut="UP" code="F"/>
+        </accelerator>
+      </MenuItem>
+      <MenuItem mnemonicParsing="false" onAction="#onSaveModelMenuItemClick" text="Save">
+        <accelerator>
+          <KeyCodeCombination alt="UP" control="DOWN" meta="UP" shift="UP" shortcut="UP" code="S"/>
+        </accelerator>
+      </MenuItem>
+      <MenuItem mnemonicParsing="false" onAction="#onSaveNewModelMenuItemClick" text="Save new model">
+        <accelerator>
+          <KeyCodeCombination alt="UP" control="DOWN" meta="UP" shift="UP" shortcut="UP" code="P"/>
+        </accelerator>
+      </MenuItem>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Choose axis">
+      <MenuItem mnemonicParsing="false" onAction="#onSelectXAxisMenuItemClick" text="X">
+        <accelerator>
+          <KeyCodeCombination alt="UP" control="DOWN" meta="UP" shift="UP" shortcut="UP" code="X"/>
+        </accelerator>
+      </MenuItem>
+      <MenuItem mnemonicParsing="false" onAction="#onSelectYAxisMenuItemClick" text="Y">
+        <accelerator>
+          <KeyCodeCombination alt="UP" control="DOWN" meta="UP" shift="UP" shortcut="UP" code="Y"/>
+        </accelerator>
+      </MenuItem>
+      <MenuItem mnemonicParsing="false" onAction="#onSelectZAxisMenuItemClick" text="Z">
+        <accelerator>
+          <KeyCodeCombination alt="UP" control="DOWN" meta="UP" shift="UP" shortcut="UP" code="Z"/>
+        </accelerator>
+      </MenuItem>
+    </Menu>
+  </MenuBar>
+  <Canvas fx:id="mainCanvas" width="1600" height="870" AnchorPane.topAnchor="30.0"/>
 </AnchorPane>

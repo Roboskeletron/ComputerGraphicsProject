@@ -12,7 +12,8 @@ public class Rasterization {
         Transform targetTransform = target.getTransform();
         Transform cameraTransform = camera.getTransform();
 
-        var z = cameraTransform.getRotation().subtract(cameraTransform.getPosition());
+//        var z = cameraTransform.getRotation().subtract(cameraTransform.getPosition());
+        var z = new Vector3F(1, 0, 0);
         var up = new Vector3F(0, 1, 0);
         var x = up.crossProduct(z);
 
