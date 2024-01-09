@@ -2,6 +2,7 @@ package com.cgp.graphics.components;
 
 import com.cgp.graphics.entities.Camera;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class Scene {
@@ -29,5 +30,9 @@ public class Scene {
         }
 
         currentCamera = (Camera) optionalCamera.get();
+    }
+
+    public ArrayList<GameObject> getObjects() {
+        return new ArrayList<>(objectCollection);
     }
 }

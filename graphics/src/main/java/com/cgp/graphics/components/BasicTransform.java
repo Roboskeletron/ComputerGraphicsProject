@@ -1,8 +1,11 @@
 package com.cgp.graphics.components;
 
 import com.cgp.graphics.primitives.Transform;
+import com.cgp.math.AffineTransform.AffineTransform;
 import com.cgp.math.matrix.Matrix4;
 import com.cgp.math.vector.Vector3F;
+
+import static javafx.scene.transform.Transform.rotate;
 
 public class BasicTransform implements Transform
 {
@@ -44,6 +47,12 @@ public class BasicTransform implements Transform
 
     @Override
     public Matrix4 toWorldCoordinates() {
-        return null;
+        AffineTransform transform = new AffineTransform();
+
+        transform.scale(scale.getX(), scale.getY(), scale.getZ());
+        transform.rotate((float) Math.toRadians(rotation.getX()), (float) Math.toRadians(rotation.getY()), (float) Math.toRadians(rotation.getZ()));
+        transform.translate(position.getX(), position.getY(), position.getZ());
+
+        return transform.getTransformationMatrix();
     }
 }

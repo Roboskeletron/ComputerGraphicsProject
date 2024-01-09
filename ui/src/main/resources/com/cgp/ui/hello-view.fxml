@@ -7,6 +7,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.canvas.Canvas?>
 
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Label?>
 <AnchorPane fx:id="anchorPane" xmlns:fx="http://javafx.com/fxml" fx:controller="com.cgp.ui.HelloController">
   <MenuBar>
     <Menu mnemonicParsing="false" text="File">
@@ -26,23 +29,32 @@
         </accelerator>
       </MenuItem>
     </Menu>
-    <Menu mnemonicParsing="false" text="Choose axis">
-      <MenuItem mnemonicParsing="false" onAction="#onSelectXAxisMenuItemClick" text="X">
-        <accelerator>
-          <KeyCodeCombination alt="UP" control="DOWN" meta="UP" shift="UP" shortcut="UP" code="X"/>
-        </accelerator>
-      </MenuItem>
-      <MenuItem mnemonicParsing="false" onAction="#onSelectYAxisMenuItemClick" text="Y">
-        <accelerator>
-          <KeyCodeCombination alt="UP" control="DOWN" meta="UP" shift="UP" shortcut="UP" code="Y"/>
-        </accelerator>
-      </MenuItem>
-      <MenuItem mnemonicParsing="false" onAction="#onSelectZAxisMenuItemClick" text="Z">
-        <accelerator>
-          <KeyCodeCombination alt="UP" control="DOWN" meta="UP" shift="UP" shortcut="UP" code="Z"/>
-        </accelerator>
-      </MenuItem>
-    </Menu>
   </MenuBar>
   <Canvas fx:id="mainCanvas" width="1600" height="870" AnchorPane.topAnchor="30.0"/>
+  <TextField fx:id="textFieldRotateX" layoutX="10" layoutY="30" prefHeight="14" prefWidth="80" />
+  <TextField fx:id="textFieldRotateY" layoutX="10" layoutY="60" prefHeight="14" prefWidth="80" />
+  <TextField fx:id="textFieldRotateZ" layoutX="10" layoutY="90" prefHeight="14" prefWidth="80" />
+
+  <Label layoutX="100" layoutY="30" text="Rotate X" />
+  <Label layoutX="100" layoutY="60" text="Rotate Y" />
+  <Label layoutX="100" layoutY="90" text="Rotate Z" />
+
+
+  <TextField fx:id="textFieldScaleX" layoutX="10" layoutY="130" prefHeight="14" prefWidth="80" />
+  <TextField fx:id="textFieldScaleY" layoutX="10" layoutY="160" prefHeight="14" prefWidth="80" />
+  <TextField fx:id="textFieldScaleZ" layoutX="10" layoutY="190" prefHeight="14" prefWidth="80" />
+
+  <Label layoutX="100" layoutY="130" text="Scale X" />
+  <Label layoutX="100" layoutY="160" text="Scale Y" />
+  <Label layoutX="100" layoutY="190" text="Scale Z" />
+
+
+  <TextField fx:id="textFieldTranslateX" layoutX="10" layoutY="230" prefHeight="14" prefWidth="80" />
+  <TextField fx:id="textFieldTranslateY" layoutX="10" layoutY="260" prefHeight="14" prefWidth="80" />
+  <TextField fx:id="textFieldTranslateZ" layoutX="10" layoutY="290" prefHeight="14" prefWidth="80" />
+
+  <Label layoutX="100" layoutY="230" text="Translate X" />
+  <Label layoutX="100" layoutY="260" text="Translate Y" />
+  <Label layoutX="100" layoutY="290" text="Translate Z" />
+
 </AnchorPane>
